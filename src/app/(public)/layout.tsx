@@ -16,10 +16,6 @@ export default function PublicLayout({
       <main className="min-h-screen vrs-bg text-white">{children}</main>
 
       <Footer />
-      {/* Room at the end of every page so the footer's contact details can
-          scroll clear of the floating webinar CTA + chat (bottom-right).
-          Heights track the CTA's top edge: pill ~144px, card ~286px. */}
-      <div aria-hidden="true" className="h-36 cta-card:h-72" />
       <WebinarCta />
       <FloatingIcons />
       <EnquiryPopup />
