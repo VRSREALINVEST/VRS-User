@@ -42,8 +42,8 @@ export default function HomePage() {
       <PageLoader visible={showLoader} />
 
       <HeroSection onLoaded={() => setHeroReady(true)} />
-      <SecuredProperties />
       <DiscoverVideoSection />
+      <SecuredProperties />
       <NationwideCoverage />
       <TeamSection />
       <TestimonialsSection />
