@@ -263,9 +263,9 @@ body.page-exit {
   animation: webinarCtaRing 2.2s ease-out 1.6s 2;
 }
 
-/* Hold both while the page loader or the enquiry popup covers the page, so
-   they play when visitors can see them. Without :has() they just run. */
-body:has([data-page-loader], [aria-modal="true"]) :is(.webinar-cta, .webinar-cta-ring) {
+/* Hold both while the page loader covers the page, so they play when
+   visitors can see them. Without :has() they just run. */
+body:has([data-page-loader]) :is(.webinar-cta, .webinar-cta-ring) {
   animation-play-state: paused;
 }
 
@@ -297,117 +297,6 @@ body:has([data-page-loader], [aria-modal="true"]) :is(.webinar-cta, .webinar-cta
   .webinar-cta-ring {
     animation: none;
   }
-}
-
-/* ============================= */
-/* PHONE INPUT (react-phone-input-2) */
-/* ============================= */
-
-/* The library ships a light-themed 15px Roboto stylesheet. These overrides
-   bring it in line with the VRS dark/gold form controls so it matches the
-   other inputs rendered by components/ui/EnquiryPopup.tsx. */
-
-.react-tel-input.vrs-phone {
-  width: 100%;
-}
-
-.react-tel-input.vrs-phone .form-control {
-  width: 100%;
-  height: auto;
-  padding: 0.75rem 1rem 0.75rem 3.5rem;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--card-border);
-  border-radius: 0.5rem;
-  transition: border-color 0.2s ease;
-  box-shadow: none;
-}
-
-.react-tel-input.vrs-phone .form-control:focus {
-  border-color: var(--primary-gold);
-  box-shadow: none;
-}
-
-.react-tel-input.vrs-phone.react-tel-input.vrs-phone-error .form-control,
-.react-tel-input.vrs-phone.react-tel-input.vrs-phone-error .flag-dropdown {
-  border-color: rgba(239, 68, 68, 0.6);
-}
-
-/* Flag button sits inside the field rather than looking like a second control. */
-.react-tel-input.vrs-phone .flag-dropdown,
-.react-tel-input.vrs-phone .flag-dropdown.open,
-.react-tel-input.vrs-phone .flag-dropdown.open .selected-flag {
-  background: transparent;
-  border: none;
-  border-radius: 0.5rem 0 0 0.5rem;
-}
-
-.react-tel-input.vrs-phone .selected-flag {
-  width: 3rem;
-  padding-left: 1rem;
-  border-radius: 0.5rem 0 0 0.5rem;
-}
-
-.react-tel-input.vrs-phone .selected-flag:hover,
-.react-tel-input.vrs-phone .selected-flag:focus,
-.react-tel-input.vrs-phone .flag-dropdown:hover .selected-flag {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.react-tel-input.vrs-phone .selected-flag .arrow {
-  border-top-color: var(--primary-gold);
-}
-
-.react-tel-input.vrs-phone .selected-flag .arrow.up {
-  border-bottom-color: var(--primary-gold);
-}
-
-/* Country dropdown panel. */
-.react-tel-input.vrs-phone .country-list {
-  margin-top: 4px;
-  background: #221f1f;
-  border: 1px solid var(--card-border);
-  border-radius: 0.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-  color: #ffffff;
-  text-align: left;
-}
-
-.react-tel-input.vrs-phone .country-list .country {
-  padding: 10px 12px;
-  font-size: 0.8125rem;
-}
-
-.react-tel-input.vrs-phone .country-list .country .dial-code {
-  color: #9ca3af;
-}
-
-.react-tel-input.vrs-phone .country-list .country:hover,
-.react-tel-input.vrs-phone .country-list .country.highlight {
-  background: rgba(231, 200, 156, 0.12);
-}
-
-.react-tel-input.vrs-phone .country-list .search {
-  padding: 10px;
-  background: #221f1f;
-}
-
-.react-tel-input.vrs-phone .country-list .search-box {
-  width: 100%;
-  margin: 0;
-  padding: 8px 10px;
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--card-border);
-  border-radius: 0.375rem;
-  font-size: 0.8125rem;
-}
-
-.react-tel-input.vrs-phone .country-list .no-entries-message {
-  color: #9ca3af;
 }
 
 /* ============================= */

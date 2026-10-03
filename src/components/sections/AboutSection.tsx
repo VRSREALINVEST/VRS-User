@@ -218,7 +218,7 @@ export default function AboutSection() {
             </p>
 
             <a
-              href="https://learn.vrsrealinvest.com.au/web/lite/events/68b9e85ce4cad97bc9d8d657"
+              href="https://calendly.com/sudesh-vrsrealinvest/one-on-one-session"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-[11px]  font-medium tracking-[0.18em] uppercase hover:opacity-90 hover:scale-[1.03] active:scale-[0.98] transition"

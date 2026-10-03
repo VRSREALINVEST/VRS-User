@@ -15,7 +15,7 @@ export default function WebinarCta() {
         href={FREE_WEBINAR_URL}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Join Free Webinar: want to connect 1-to-1 with VRS RealInvest? (opens in a new tab)"
+        aria-label="Join Free Webinar with VRS RealInvest (opens in a new tab)"
         className="group relative block rounded-full
         bg-[var(--primary-gold)] text-[#221F1F]
         shadow-[0_12px_30px_rgba(0,0,0,0.55)]
@@ -35,11 +35,8 @@ export default function WebinarCta() {
           </span>
 
           <span className="flex flex-col text-left leading-tight">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em]">
-              Free Webinar
-            </span>
             <span className="flex items-center gap-1 text-[11px] font-medium">
-              Connect 1-to-1
+              Free Webinar
               <ArrowRight size={12} aria-hidden="true" />
             </span>
           </span>
@@ -47,20 +44,13 @@ export default function WebinarCta() {
 
         {/* FULL CARD — desktop */}
         <span className="hidden w-[17rem] p-5 cta-card:block">
-          <span className="flex items-start gap-3.5">
+          <span className="flex items-center gap-3.5">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--primary-gold)]/40 bg-[var(--primary-gold)]/10 text-[var(--primary-gold)]">
               <Video size={20} aria-hidden="true" />
             </span>
 
-            <span className="block">
-              <span className="block text-[10px] font-medium uppercase tracking-[0.22em] text-[var(--primary-gold)]">
-                Free Webinar
-              </span>
-              {/* nowrap stops "1-to-1" breaking at its hyphens; lining-nums
-                  because Cormorant's default old-style 1 reads as "ı". */}
-              <span className="mt-1 block font-[family-name:var(--font-heading)] text-[1.4rem] font-medium leading-[1.15] text-white lining-nums">
-                Want to <span className="whitespace-nowrap">Connect 1-to-1?</span>
-              </span>
+            <span className="block font-[family-name:var(--font-heading)] text-[1.4rem] font-medium leading-[1.15] text-white">
+              Free Webinar
             </span>
           </span>
 

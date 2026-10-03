@@ -8,8 +8,8 @@ export default function PageLoader({ visible }: { visible: boolean }) {
       {visible && (
         <motion.div
           key="loader"
-          // Marks the full-screen loading overlay so other overlays (the
-          // enquiry popup) can wait for it to clear instead of opening behind it.
+          // Marks the full-screen loading overlay so the webinar CTA
+          // (globals.css) can hold its entrance until the loader clears.
           data-page-loader
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}

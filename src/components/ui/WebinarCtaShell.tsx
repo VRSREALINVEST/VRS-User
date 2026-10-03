@@ -20,7 +20,7 @@ export default function WebinarCtaShell({
     // 12px above the chat button in FloatingIcons (fixed bottom-6 right-6,
     // h-14): 1.5rem + 3.5rem + 0.75rem = 5.75rem. z-40 keeps it over page
     // content but under the navbar/mobile menu and page modals (z-50), the
-    // chat widget and its panel (z-[999]), the enquiry popup and the loader.
+    // chat widget and its panel (z-[999]) and the loader.
     // Closing fades out, then display:none (allow-discrete) takes it out of
     // the tab order; browsers without discrete transitions just hide it.
     // The wrapper itself never takes clicks, so it can't block the page

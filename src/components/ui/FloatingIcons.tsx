@@ -47,7 +47,7 @@
 //           <div className="space-y-2">
 
 //             <a
-//               href="https://learn.vrsrealinvest.com.au/web/lite/events/68b9e85ce4cad97bc9d8d657"
+//               href="https://calendly.com/sudesh-vrsrealinvest/one-on-one-session"
 //               target="_blank"
 //               className="flex items-center gap-3 p-3 rounded-lg bg-black/30 hover:bg-black/50 transition"
 //             >
@@ -140,7 +140,7 @@ export default function FloatingAssistant() {
             👋 Welcome! Choose an option below.
           </div>
 
-          <a href="https://learn.vrsrealinvest.com.au/web/lite/events/68b9e85ce4cad97bc9d8d657" className="flex gap-3 p-3 rounded-lg bg-black/30 hover:bg-black/50">
+          <a href="https://calendly.com/sudesh-vrsrealinvest/one-on-one-session" className="flex gap-3 p-3 rounded-lg bg-black/30 hover:bg-black/50">
             <Calendar size={16} />
             Book Consultation
           </a>
