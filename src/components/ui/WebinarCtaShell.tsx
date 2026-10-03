@@ -45,7 +45,6 @@ export default function WebinarCtaShell({
             pill it stays clear of the text and of the footer's 160px
             clearance above the pill) without growing the circle. */}
         <button
-        
           type="button"
           onClick={() => setClosed(true)}
           aria-label="Close free webinar"
