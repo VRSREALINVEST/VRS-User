@@ -2,21 +2,23 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import ScrollToTop from "@/components/common/ScrollToTop";
-import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 
 // GA4 loads only when the measurement ID is provided at build time.
 // Events are fired sparingly and must never carry PII (client requirement).
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-const playfair = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const playfair = localFont({
+  src: "./fonts/CormorantGaramond-Variable.woff2",
+  weight: "300 700",
+  display: "swap",
   variable: "--font-heading",
 });
 
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const montserrat = localFont({
+  src: "./fonts/Montserrat-Variable.woff2",
+  weight: "100 900",
+  display: "swap",
   variable: "--font-body",
 });
 
