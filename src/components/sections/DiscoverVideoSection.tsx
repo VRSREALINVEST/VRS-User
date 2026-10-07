@@ -12,6 +12,8 @@ export default function DiscoverVideoSection() {
   const [isMuted, setIsMuted] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+  
   useEffect(() => {
     const fetchData = async () => {
       const res = await fetch(`${API}/api/discover-video`);
