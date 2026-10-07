@@ -39,7 +39,7 @@ export default function PropertiesPage() {
             </p>
 
             <a
-              href="https://calendly.com/sudesh-vrsrealinvest/one-on-one-session"
+              href="https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-6 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition"

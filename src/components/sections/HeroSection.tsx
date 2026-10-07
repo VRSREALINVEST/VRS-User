@@ -155,7 +155,7 @@ export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
               so the hydrated DOM never matched the server HTML. inline-block
               matches the other CTA anchors in the app. */}
           <a
-            href="https://calendly.com/sudesh-vrsrealinvest/one-on-one-session"
+            href="https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-9 py-3 text-[11px]  font-medium tracking-[0.22em] uppercase rounded-md border border-[#E7C89C] text-[#E7C89C]
