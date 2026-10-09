@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 
 // Client half of WebinarCta: fixed position, the close (×) button and the
@@ -9,32 +10,52 @@ import { X } from "lucide-react";
 // Closed is plain component state, never persisted: it lasts while moving
 // between pages (the (public) layout stays mounted) and the CTA is open
 // again on every load/refresh.
+//
+// It also stays hidden while an element marked data-hide-webinar-cta is on
+// screen: the homepage hero, which has its own Free Webinar button and would
+// otherwise sit under this fixed CTA on first view. Stored per path, since
+// this shell outlives page navigations.
 export default function WebinarCtaShell({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [closed, setClosed] = useState(false);
+  const pathname = usePathname();
+  const [heroOnScreen, setHeroOnScreen] = useState<string | null>(null);
+
+  useEffect(() => {
+    const hero = document.querySelector("[data-hide-webinar-cta]");
+    if (!hero) return;
+
+    const observer = new IntersectionObserver((entries) =>
+      setHeroOnScreen(entries[entries.length - 1].isIntersecting ? pathname : null),
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  const isHidden = closed || heroOnScreen === pathname;
 
   return (
     // 12px above the chat button in FloatingIcons (fixed bottom-6 right-6,
     // h-14): 1.5rem + 3.5rem + 0.75rem = 5.75rem. z-40 keeps it over page
     // content but under the navbar/mobile menu and page modals (z-50), the
-    // chat widget and its panel (z-[999]) and the loader.
+    // WhatsApp button (z-[999]) and the loader.
     // Closing fades out, then display:none (allow-discrete) takes it out of
     // the tab order; browsers without discrete transitions just hide it.
     // The wrapper itself never takes clicks, so it can't block the page
     // while the CTA is still invisible (entrance delay) or fading out.
     <div
       className={`pointer-events-none fixed right-6 bottom-[calc(5.75rem_+_env(safe-area-inset-bottom))] z-40 origin-bottom-right transition-[opacity,scale,display] transition-discrete duration-200 motion-reduce:transition-none ${
-        closed ? "hidden scale-95 opacity-0" : ""
+        isHidden ? "hidden scale-95 opacity-0" : ""
       }`}
     >
       {/* .webinar-cta (globals.css) runs the entrance on this inner layer;
           its filled opacity/visibility would override the fade above. */}
       <div
         className={`webinar-cta relative transition-transform duration-300 motion-safe:hover:-translate-y-0.5 ${
-          closed ? "pointer-events-none" : "pointer-events-auto"
+          isHidden ? "pointer-events-none" : "pointer-events-auto"
         }`}
       >
         {children}

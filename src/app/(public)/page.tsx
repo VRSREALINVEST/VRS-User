@@ -5,7 +5,6 @@ import PageLoader from "@/components/common/PageLoader";
 import HeroSection from "@/components/sections/HeroSection";
 import SecuredProperties from "@/components/sections/SecuredProperties";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import DiscoverVideoSection from "@/components/sections/DiscoverVideoSection";
 import TeamSection from "@/components/sections/TeamSection";
 import NationwideCoverage from "@/components/sections/NationwideCoverage";
 
@@ -42,7 +41,6 @@ export default function HomePage() {
       <PageLoader visible={showLoader} />
 
       <HeroSection onLoaded={() => setHeroReady(true)} />
-      <DiscoverVideoSection />
       <SecuredProperties />
       <NationwideCoverage />
       <TeamSection />

@@ -1,33 +1,39 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { CheckCircle } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import PageLoader from "@/components/common/PageLoader";
 
-// Message posted by the same-origin /contact/thank-you bridge page after the
-// Calzol CRM form redirects to it on a successful submission.
-const SUBMISSION_MESSAGE_TYPE = "vrs:contact-submitted";
+// Mirrors the footer's contact details (components/layout/Footer.tsx).
+const CONTACT_DETAILS = [
+  {
+    Icon: Phone,
+    label: "Phone",
+    value: "+61 412 864 050",
+    href: "tel:+61412864050",
+  },
+  {
+    Icon: Mail,
+    label: "Email",
+    // <wbr /> wraps the address after "@" on narrow phones (adds no character).
+    value: <>sudhesh@<wbr />vrsrealinvest.com.au</>,
+    href: "mailto:sudhesh@vrsrealinvest.com.au",
+  },
+];
 
 export default function ContactPage() {
   const lineRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  // ✅ loader states
-  const [loading, setLoading] = useState(true);
+  // PageLoader is a fixed full-screen overlay, so page content renders (and
+  // server-renders) underneath it. With no embed left to wait on, it clears
+  // on the same 1300ms timer as the About page.
   const [showLoader, setShowLoader] = useState(true);
-
-  // ✅ CRM submission state — set only via the validated bridge message below
-  const [submitted, setSubmitted] = useState(false);
-  const submittedRef = useRef(false);
 
   // ================= HEADER LINE =================
   useEffect(() => {
-    setMounted(true);
-
     const el = lineRef.current;
     if (!el) return;
 
@@ -43,7 +49,7 @@ export default function ContactPage() {
 
   // ================= SCROLL ANIMATION =================
   useEffect(() => {
-    const el = formRef.current;
+    const el = cardRef.current;
     if (!el) return;
 
     const observer = new IntersectionObserver(
@@ -62,46 +68,8 @@ export default function ContactPage() {
 
   // ================= LOADER EXIT =================
   useEffect(() => {
-    if (!loading) {
-      const t1 = setTimeout(() => setShowLoader(false), 400);
-      return () => clearTimeout(t1);
-    }
-  }, [loading]);
-
-  // ✅ fallback (never stuck)
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-      setShowLoader(false);
-    }, 6000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  // ================= CRM SUBMISSION BRIDGE =================
-  // The CRM form is a cross-origin iframe, so success cannot be observed
-  // directly. On successful submission the CRM redirects the iframe to our
-  // same-origin /contact/thank-you bridge, which posts a message to this
-  // page. Origin and message type are strictly validated; anything else is
-  // ignored, and the handler can only ever fire once.
-  useEffect(() => {
-    const onMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
-
-      const data = event.data as { type?: unknown } | null;
-      if (!data || data.type !== SUBMISSION_MESSAGE_TYPE) return;
-
-      if (submittedRef.current) return;
-      submittedRef.current = true;
-
-      setSubmitted(true);
-
-      // Deliberately a bare event: no parameters, no form data, no PII.
-      window.gtag?.("event", "generate_lead");
-    };
-
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
+    const timer = setTimeout(() => setShowLoader(false), 1300);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -144,114 +112,68 @@ export default function ContactPage() {
             </h1>
 
             <p className="text-gray-500 text-xs tracking-[0.25em] uppercase">
-              Let's begin the conversation
+              Let&apos;s begin the conversation
             </p>
           </div>
 
-          {/* FORM */}
-          {/* Width tracks the CRM form's own ~480px layout (set in Calzol) so the
-              embed reads as one centred component instead of a small form adrift
-              in a much wider VRS container. */}
+          {/* CONTACT DETAILS */}
           <div className="max-w-xl mx-auto px-4">
             <div
-              ref={formRef}
+              ref={cardRef}
               className={`relative group transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                 visible
                   ? "opacity-100 translate-y-0 scale-100 blur-0"
                   : "opacity-0 translate-y-16 scale-[0.96] blur-sm"
               }`}
             >
-              {/* VRS frame — rendered only around the thank-you card. The CRM
-                  form supplies its own card (background + border), so framing the
-                  iframe as well produced a second, larger box around a smaller
-                  form, with dead space on all four sides. */}
-              {submitted && (
-                <>
-                  {/* CORNERS */}
-                  {[
-                    "top-0 left-0 border-t border-l",
-                    "top-0 right-0 border-t border-r",
-                    "bottom-0 left-0 border-b border-l",
-                    "bottom-0 right-0 border-b border-r",
-                  ].map((pos) => (
-                    <div
-                      key={pos}
-                      className={`absolute ${pos} w-6 h-6 border-[var(--primary-gold)]/40 transition duration-500 ${
-                        visible ? "opacity-100 scale-100" : "opacity-0 scale-75"
-                      }`}
-                    />
-                  ))}
+              {/* CORNERS */}
+              {[
+                "top-0 left-0 border-t border-l",
+                "top-0 right-0 border-t border-r",
+                "bottom-0 left-0 border-b border-l",
+                "bottom-0 right-0 border-b border-r",
+              ].map((pos) => (
+                <div
+                  key={pos}
+                  className={`absolute ${pos} w-6 h-6 border-[var(--primary-gold)]/40 transition duration-500 ${
+                    visible ? "opacity-100 scale-100" : "opacity-0 scale-75"
+                  }`}
+                />
+              ))}
 
-                  {/* GLOW */}
-                  <div
-                    className={`absolute -inset-2 rounded-2xl bg-[var(--primary-gold)]/10 blur-2xl transition-all duration-1000 ${
-                      visible ? "opacity-60" : "opacity-0"
-                    }`}
-                  />
-                </>
-              )}
-
-              {/* CARD (thank-you only) / bare embed area (form) */}
+              {/* GLOW */}
               <div
-                className={
-                  submitted
-                    ? "rounded-2xl overflow-hidden relative border border-[var(--card-border)]"
-                    : "relative w-full max-w-full overflow-hidden"
-                }
-              >
-                {submitted ? (
-                  /* ============ VRS THANK-YOU (after confirmed submission) ============ */
-                  <div className="bg-[var(--card-bg)] px-6 py-16 md:py-20 text-center">
-                    <CheckCircle
-                      size={44}
-                      strokeWidth={1.5}
-                      className="mx-auto text-[var(--primary-gold)]"
-                    />
+                className={`absolute -inset-2 rounded-2xl bg-[var(--primary-gold)]/10 blur-2xl transition-all duration-1000 ${
+                  visible ? "opacity-60" : "opacity-0"
+                }`}
+              />
 
-                    <h2 className="mt-6 text-2xl md:text-3xl font-medium text-white tracking-[-0.01em]">
-                      Thank You
-                    </h2>
+              {/* CARD */}
+              <div className="rounded-2xl overflow-hidden relative border border-[var(--card-border)] bg-[var(--card-bg)] divide-y divide-[var(--card-border)]">
+                {CONTACT_DETAILS.map(({ Icon, label, value, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    // Inset ring + rounded outer corners keep the focus
+                    // outline fully inside the card's overflow-hidden clip.
+                    className="flex items-center gap-4 px-6 py-6 md:px-8 text-white transition-colors hover:bg-white/[0.03] hover:text-[var(--primary-gold)] first:rounded-t-2xl last:rounded-b-2xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--primary-gold)]"
+                  >
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--primary-gold)]/40 bg-[var(--primary-gold)]/10 text-[var(--primary-gold)]">
+                      <Icon size={20} aria-hidden="true" />
+                    </span>
 
-                    <p className="mt-4 text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed tracking-wide">
-                      Your enquiry has been received. Our team will review it
-                      and be in touch with you shortly.
-                    </p>
-
-                    <div className="mt-8 flex flex-wrap gap-4 justify-center">
-                      <Link
-                        href="/"
-                        className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-[11px] font-medium tracking-[0.18em] uppercase transition hover:opacity-90"
-                      >
-                        Back to Home
-                      </Link>
-                      <Link
-                        href="/properties"
-                        className="inline-block border border-[#E7C89C] text-[#E7C89C] px-7 py-2.5 rounded-lg text-[11px] font-medium tracking-[0.18em] uppercase transition hover:bg-[#E7C89C] hover:text-[#221F1F]"
-                      >
-                        View Properties
-                      </Link>
-                    </div>
-                  </div>
-                ) : (
-                  mounted && (
-                    <iframe
-                      src="https://heart.calzolconnect.com/form/contact-enquiry"
-                      // The CRM exposes no auto-resize/height postMessage, so
-                      // these are fixed heights measured from the rendered
-                      // form. Narrow screens wrap labels and validation lines
-                      // onto extra rows, so they get progressively more room
-                      // rather than clipping the last fields. `block w-full`
-                      // removes the inline-frame baseline gap and keeps the
-                      // embed inside the column on every breakpoint. Retune
-                      // here if fields change in Calzol.
-                      className="block w-full max-w-full h-[660px] sm:h-[580px] md:h-[500px]"
-                      style={{ border: "none" }}
-                      title="Enquiry Form"
-                      loading="lazy"
-                      onLoad={() => setLoading(false)} // ✅ KEY
-                    />
-                  )
-                )}
+                    {/* min-w-0 + overflow-wrap let the long email wrap rather
+                        than overflow on narrow (320px) screens. */}
+                    <span className="min-w-0">
+                      <span className="block text-[10px] tracking-[0.3em] uppercase text-[var(--primary-gold)]/70">
+                        {label}
+                      </span>
+                      <span className="mt-1 block text-base md:text-lg tracking-wide [overflow-wrap:anywhere]">
+                        {value}
+                      </span>
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
 
