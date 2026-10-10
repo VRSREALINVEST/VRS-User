@@ -4,14 +4,28 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { PlayCircle, Volume2, VolumeX, X } from "lucide-react";
 
+// YouTube embed command over postMessage (needs enablejsapi=1)
+const ytCommand = (
+  iframe: HTMLIFrameElement | null,
+  func: string,
+  args: string[] = [],
+) =>
+  iframe?.contentWindow?.postMessage(
+    JSON.stringify({ event: "command", func, args }),
+    "*",
+  );
+
 export default function DiscoverVideo() {
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [data, setData] = useState<{ videoUrl?: string } | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const modalIframeRef = useRef<HTMLIFrameElement>(null);
   const playButtonRef = useRef<HTMLButtonElement>(null);
+  const playerState = useRef<number | null>(null);
 
+  // Mirror the player's own reports (see the message listener below)
   const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,6 +42,52 @@ export default function DiscoverVideo() {
     if (API) fetchData();
   }, [API]);
 
+  // The preview autoplays with sound where the browser allows it. Once told
+  // we're "listening" (iframe onLoad) the player reports its state. Blocked
+  // audible autoplay leaves it unstarted (-1): retry once muted, and the sound
+  // button lets the visitor turn audio on. No further retries.
+  useEffect(() => {
+    let fallback: ReturnType<typeof setTimeout> | undefined;
+    const onMessage = (e: MessageEvent) => {
+      const iframe = iframeRef.current;
+      if (!iframe || e.source !== iframe.contentWindow) return;
+      let msg;
+      try {
+        msg = JSON.parse(e.data);
+      } catch {
+        return;
+      }
+      const info = msg?.info;
+      if (info && typeof info === "object") {
+        if (typeof info.playerState === "number") {
+          playerState.current = info.playerState;
+          // Buffering (3) and loop end (0) keep the last state, so the sound
+          // button doesn't flicker
+          if (info.playerState === 1) {
+            setIsPlaying(true);
+            // YouTube turns its own captions on for muted autoplay; they
+            // overlap the captions burned into the video
+            ytCommand(iframe, "unloadModule", ["captions"]);
+          } else if (info.playerState !== 3 && info.playerState !== 0)
+            setIsPlaying(false);
+        }
+        if (typeof info.muted === "boolean") setIsMuted(info.muted);
+      }
+      if (msg?.event === "onReady") {
+        fallback = setTimeout(() => {
+          if (playerState.current !== -1) return;
+          ytCommand(iframe, "mute");
+          ytCommand(iframe, "playVideo");
+        }, 1500);
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => {
+      window.removeEventListener("message", onMessage);
+      clearTimeout(fallback);
+    };
+  }, []);
+
   // Lock body scroll when modal is open
   useEffect(() => {
     if (isModalOpen) {
@@ -42,11 +102,9 @@ export default function DiscoverVideo() {
 
   // Stable identity so the Escape listener below can depend on it
   const closeModal = useCallback(() => {
-    // Stop the modal video
-    modalIframeRef.current?.contentWindow?.postMessage(
-      '{"event":"command","func":"stopVideo","args":""}',
-      "*",
-    );
+    // Stop the modal video, resume the preview
+    ytCommand(modalIframeRef.current, "stopVideo");
+    ytCommand(iframeRef.current, "playVideo");
     setIsModalOpen(false);
     // Return focus to the control that opened the modal
     playButtonRef.current?.focus();
@@ -74,39 +132,29 @@ export default function DiscoverVideo() {
   const videoId = getVideoId(data.videoUrl);
   if (!videoId) return null;
 
-  // Thumbnail embed (muted, no controls)
-  const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&mute=1`;
+  // Preview embed: autoplay (with sound if allowed), looping, no controls.
+  // origin lets the player post its state back to this page.
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&autoplay=1&playsinline=1&loop=1&playlist=${videoId}&origin=${encodeURIComponent(window.location.origin)}`;
 
   // Modal embed (autoplay, with controls, unmuted)
   const modalEmbedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&controls=1`;
 
-  const playVideo = () => {
-    iframeRef.current?.contentWindow?.postMessage(
-      '{"event":"command","func":"playVideo","args":""}',
-      "*",
-    );
-  };
+  const soundOn = isPlaying && !isMuted;
 
-  const pauseVideo = () => {
-    iframeRef.current?.contentWindow?.postMessage(
-      '{"event":"command","func":"pauseVideo","args":""}',
-      "*",
-    );
-  };
-
-  const toggleMute = (e: React.MouseEvent) => {
+  const toggleSound = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!iframeRef.current) return;
-    const command = isMuted ? "unMute" : "mute";
-    iframeRef.current.contentWindow?.postMessage(
-      `{"event":"command","func":"${command}","args":""}`,
-      "*",
-    );
-    setIsMuted(!isMuted);
+    if (soundOn) {
+      ytCommand(iframeRef.current, "mute");
+    } else {
+      // The click is a user gesture, so audible playback is allowed now
+      ytCommand(iframeRef.current, "unMute");
+      ytCommand(iframeRef.current, "playVideo");
+    }
+    setIsMuted(soundOn);
   };
 
   const openModal = () => {
-    pauseVideo(); // pause the thumbnail video
+    ytCommand(iframeRef.current, "pauseVideo"); // pause the preview
     setIsModalOpen(true);
   };
 
@@ -120,11 +168,9 @@ export default function DiscoverVideo() {
         hover:shadow-[0_30px_90px_rgba(0,0,0,0.9)]
         hover:scale-[1.01]
         transition-all duration-500"
-        onMouseEnter={playVideo}
-        onMouseLeave={pauseVideo}
       >
         <div className="relative w-full aspect-video">
-          {/* Thumbnail Video — decorative muted preview behind the play button */}
+          {/* Preview video — decorative, behind the play button */}
           <iframe
             ref={iframeRef}
             title="Discover VRS Realinvest — video"
@@ -132,6 +178,12 @@ export default function DiscoverVideo() {
             src={embedUrl}
             tabIndex={-1}
             aria-hidden="true"
+            onLoad={(e) =>
+              e.currentTarget.contentWindow?.postMessage(
+                JSON.stringify({ event: "listening", id: 1, channel: "widget" }),
+                "*",
+              )
+            }
             className="absolute inset-0 w-full h-full transition-transform duration-[1200ms] group-hover:scale-105"
             allow="autoplay; encrypted-media"
           />
@@ -161,15 +213,22 @@ export default function DiscoverVideo() {
             />
           </button>
 
-          {/* Mute Button — a sibling stacked above the play button, since
-              interactive elements can't nest */}
+          {/* Sound Button — a sibling stacked above the play button, since
+              interactive elements can't nest. Visibly labelled while off. */}
           <button
             type="button"
-            aria-label={isMuted ? "Unmute video preview" : "Mute video preview"}
-            onClick={toggleMute}
-            className="absolute bottom-4 right-4 z-10 bg-black/60 backdrop-blur-sm p-2.5 rounded-full text-white hover:bg-black/80 transition"
+            aria-label={soundOn ? "Mute video preview" : undefined}
+            onClick={toggleSound}
+            className="absolute bottom-4 right-4 z-10 flex items-center gap-2 bg-black/60 backdrop-blur-sm p-2.5 rounded-full text-white text-[11px] tracking-[0.15em] uppercase hover:bg-black/80 transition"
           >
-            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            {soundOn ? (
+              <Volume2 size={18} />
+            ) : (
+              <>
+                <VolumeX size={18} aria-hidden="true" />
+                <span className="pr-1">Enable sound</span>
+              </>
+            )}
           </button>
         </div>
       </div>

@@ -1,25 +1,8 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import SecuredProperties from "@/components/sections/SecuredProperties";
-import PageLoader from "@/components/common/PageLoader";
 
 export default function PropertiesPage() {
-  // PageLoader is a fixed full-screen overlay, so page content renders (and
-  // server-renders) underneath it instead of being gated behind `loading`.
-  // 1300ms preserves the previous 800ms + 500ms loader timing exactly.
-  const [showLoader, setShowLoader] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowLoader(false), 1300);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <>
-      {/* LOADER */}
-      <PageLoader visible={showLoader} />
-
       {/* ================= PROPERTIES ================= */}
       <main className="pt-10">
         <SecuredProperties />

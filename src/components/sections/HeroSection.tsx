@@ -20,7 +20,7 @@ interface HeroData {
   images?: ImageItem[];
 }
 
-export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
+export default function HeroSection() {
   const [hero, setHero] = useState<HeroData | null>(null);
   const [current, setCurrent] = useState(0);
   const [mediaReady, setMediaReady] = useState(false);
@@ -35,8 +35,8 @@ export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
         const data = await res.json();
         setHero(data);
       } catch (err) {
+        // The hero text renders regardless; only the background media is lost.
         console.error("Hero fetch error", err);
-        onLoaded && onLoaded();
       }
     };
 
@@ -44,7 +44,6 @@ export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
       fetchHero();
     } else {
       console.warn("API_BASE_URL missing");
-      onLoaded && onLoaded();
     }
   }, [API_BASE_URL]);
 
@@ -58,13 +57,6 @@ export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
       return () => clearInterval(interval);
     }
   }, [hero]);
-
-  // ================= MEDIA READY =================
-  useEffect(() => {
-    if (mediaReady) {
-      onLoaded && onLoaded();
-    }
-  }, [mediaReady]);
 
   const hasImages = hero?.type === "image" && hero.images?.length;
   const hasVideo = hero?.type === "video" && hero.video?.url;
@@ -87,7 +79,6 @@ export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
             // First slide is the LCP once data arrives; later slides can wait.
             fetchPriority={index === 0 ? "high" : "low"}
             decoding="async"
-            onLoad={() => setMediaReady(true)}
             className={`absolute inset-0 w-full h-full object-cover transition-all duration-[2200ms] ease-out ${
               index === current
                 ? "opacity-100 scale-110 blur-0"
@@ -116,12 +107,9 @@ export default function HeroSection({ onLoaded }: { onLoaded?: () => void }) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(231,200,156,0.18),transparent_70%)]" />
 
       {/* ================= CONTENT ================= */}
-      {/* pt-24 clears the fixed navbar, pb-36 the Scroll indicator */}
-      <div
-        className={`relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-6 pt-24 pb-36 transition-all duration-[1200ms] ease-out ${
-          mediaReady ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-        }`}
-      >
+      {/* pt-24 clears the fixed navbar, pb-36 the Scroll indicator. Visible
+          from the first paint: it never waits for the hero API or media. */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-6 pt-24 pb-36">
         {/* DOM order = mobile order; from lg, text left and video right, the
             1fr rows centring them on each other. Two columns only once the
             video rendered (DiscoverVideo returns null when unavailable). */}

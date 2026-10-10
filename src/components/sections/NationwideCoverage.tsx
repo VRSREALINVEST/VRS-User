@@ -38,7 +38,6 @@ export default function NationwideCoverage() {
               alt="Australia Map"
               fill
               className="object-cover opacity-80"
-              priority
             />
 
             {/* DARK OVERLAY */}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import useNearViewport from "@/lib/useNearViewport";
 import {
   Star,
   ChevronLeft,
@@ -47,17 +48,21 @@ export default function TestimonialsSection() {
     return match ? match[1] : null;
   };
 
+  const [sectionRef, near] = useNearViewport<HTMLElement>();
+
   useEffect(() => {
-    if (!API) return;
+    if (!API || !near) return;
 
     const fetchText = async () => {
       const res = await fetch(`${API}/api/text-testimonials`);
+      if (!res.ok) return;
       const data = await res.json();
       setReviews(data);
     };
 
     const fetchVideos = async () => {
       const res = await fetch(`${API}/api/video-testimonials`);
+      if (!res.ok) return;
       const data = await res.json();
       setVideos(data);
       const muteState: any = {};
@@ -67,9 +72,9 @@ export default function TestimonialsSection() {
       setMutedVideos(muteState);
     };
 
-    fetchText();
-    fetchVideos();
-  }, [API]);
+    fetchText().catch(console.error);
+    fetchVideos().catch(console.error);
+  }, [API, near]);
 
   // Auto-slide
   useEffect(() => {
@@ -118,6 +123,7 @@ export default function TestimonialsSection() {
   return (
     <>
       <section
+        ref={sectionRef}
         className={`relative py-20 text-center transition-all duration-300 ${
           modalVideo ? "blur-sm brightness-50" : ""
         }`}

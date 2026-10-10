@@ -263,12 +263,6 @@ body.page-exit {
   animation: webinarCtaRing 2.2s ease-out 1.6s 2;
 }
 
-/* Hold both while the page loader covers the page, so they play when
-   visitors can see them. Without :has() they just run. */
-body:has([data-page-loader]) :is(.webinar-cta, .webinar-cta-ring) {
-  animation-play-state: paused;
-}
-
 @keyframes webinarCtaEnter {
   from {
     opacity: 0;

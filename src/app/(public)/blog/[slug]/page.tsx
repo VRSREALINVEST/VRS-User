@@ -55,7 +55,9 @@ function formatBlogContent(content: string): React.ReactNode[] {
     // ⭐ Bold (**text**)
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
 
-    return formatted;
+    // Legacy text can still carry raw HTML (anything looksLikeHtml misses),
+    // so it goes through the same allowlist as editor content.
+    return sanitizeBlogHtml(formatted);
   };
 
   lines.forEach((line, i) => {
@@ -229,9 +231,13 @@ export default async function BlogDetail({
 
   return (
     <main className="text-white min-h-screen">
+      {/* "<" is escaped so a "</script>" in an admin-entered title or
+          description can't close this tag and inject markup. */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
 
       {/* HERO */}

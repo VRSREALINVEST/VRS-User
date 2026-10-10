@@ -1,36 +1,12 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import PageLoader from "@/components/common/PageLoader";
 import HeroSection from "@/components/sections/HeroSection";
 import SecuredProperties from "@/components/sections/SecuredProperties";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import TeamSection from "@/components/sections/TeamSection";
 import NationwideCoverage from "@/components/sections/NationwideCoverage";
 
+// Server component: the sections are client components that fetch their own
+// data, so nothing here waits on an API — the hero text is in the first HTML.
 export default function HomePage() {
-  const [heroReady, setHeroReady] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
-
-  // ✅ When hero is ready → delay + fade loader out
-  useEffect(() => {
-    if (heroReady) {
-      const timer = setTimeout(() => {
-        setShowLoader(false);
-      }, 600); // smooth overlap
-
-      return () => clearTimeout(timer);
-    }
-  }, [heroReady]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowLoader(false);
-    }, 6000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
   return (
     <>
       {/* Manual homepage canonical: Next strips the root-path trailing slash
@@ -38,9 +14,7 @@ export default function HomePage() {
           directly here. Root layout's alternates.canonical was removed to avoid
           a duplicate. */}
       <link rel="canonical" href="https://www.vrsrealinvest.com.au/" />
-      <PageLoader visible={showLoader} />
-
-      <HeroSection onLoaded={() => setHeroReady(true)} />
+      <HeroSection />
       <SecuredProperties />
       <NationwideCoverage />
       <TeamSection />

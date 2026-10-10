@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Mail, Phone } from "lucide-react";
-import PageLoader from "@/components/common/PageLoader";
 
 // Mirrors the footer's contact details (components/layout/Footer.tsx).
 const CONTACT_DETAILS = [
@@ -26,11 +25,6 @@ export default function ContactPage() {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const [visible, setVisible] = useState(false);
-
-  // PageLoader is a fixed full-screen overlay, so page content renders (and
-  // server-renders) underneath it. With no embed left to wait on, it clears
-  // on the same 1300ms timer as the About page.
-  const [showLoader, setShowLoader] = useState(true);
 
   // ================= HEADER LINE =================
   useEffect(() => {
@@ -66,17 +60,8 @@ export default function ContactPage() {
     return () => observer.disconnect();
   }, []);
 
-  // ================= LOADER EXIT =================
-  useEffect(() => {
-    const timer = setTimeout(() => setShowLoader(false), 1300);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <>
-      {/* ✅ Loader */}
-      <PageLoader visible={showLoader} />
-
       <main className="pt-6  text-white min-h-screen relative overflow-hidden">
         {/* BACKGROUND */}
         <div className="absolute inset-0 pointer-events-none">

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle } from "lucide-react";
 import axios from "axios";
+import useNearViewport from "@/lib/useNearViewport";
 
 interface SecuredProperty {
   _id: string;
@@ -36,9 +37,13 @@ export default function SecuredProperties() {
 
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  // Directly below the hero on "/": wait for an actual scroll (margin 0),
+  // since the cover images are large and would compete with the hero.
+  const [sectionRef, near] = useNearViewport<HTMLElement>("0px");
+
   // ================= FETCH =================
   useEffect(() => {
-    if (propertiesCache) return;
+    if (propertiesCache || !near) return;
 
     const fetchProperties = async () => {
       try {
@@ -53,7 +58,7 @@ export default function SecuredProperties() {
     };
 
     fetchProperties();
-  }, [API]);
+  }, [API, near]);
 
   // ================= AUTO SCROLL =================
   useEffect(() => {
@@ -124,7 +129,7 @@ export default function SecuredProperties() {
   return (
     <>
       {/* ================= SECTION ================= */}
-      <section className="relative py-20 overflow-hidden">
+      <section ref={sectionRef} className="relative py-20 overflow-hidden">
         {/* ✅ FULL WIDTH GLOW */}
         <div className="absolute inset-0 bg-gradient-to-t  via-black/20 to-transparent" />
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import useNearViewport from "@/lib/useNearViewport";
 
 interface TeamMember {
   _id: string;
@@ -13,11 +14,15 @@ export default function TeamSection() {
   const API = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sectionRef, near] = useNearViewport<HTMLElement>();
 
   useEffect(() => {
+    if (!near) return;
     const fetchTeam = async () => {
       try {
         const res = await fetch(`${API}/api/team`);
+        // An error body ({ message }) would crash .map below
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setTeamMembers(data);
       } catch (error) {
@@ -29,7 +34,7 @@ export default function TeamSection() {
 
     if (API) fetchTeam();
     else setLoading(false);
-  }, [API]);
+  }, [API, near]);
 
   // Hide the section only once we know there is genuinely no data. While
   // loading, the header + skeletons render (and server-render) so the page
@@ -39,7 +44,7 @@ export default function TeamSection() {
   const isScrollable = teamMembers.length > 4;
 
   return (
-    <section className="py-20 md:py-24">
+    <section ref={sectionRef} className="py-20 md:py-24">
       <div className="px-6 md:px-10 lg:px-20">
         {/* HEADER */}
         <div className="text-center mb-12">
