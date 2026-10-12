@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
-import { PlayCircle, Volume2, VolumeX, X } from "lucide-react";
+import { Volume2, VolumeX, X } from "lucide-react";
 
 // YouTube embed command over postMessage (needs enablejsapi=1)
 const ytCommand = (
@@ -188,30 +188,22 @@ export default function DiscoverVideo() {
             allow="autoplay; encrypted-media"
           />
 
-          {/* Cinematic Overlay */}
-          <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition duration-500"></div>
-
           {/* Glow Layer */}
           <div
             className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-700 pointer-events-none
             bg-[radial-gradient(circle_at_center,rgba(231,200,156,0.15),transparent_70%)]"
           />
 
-          {/* Play Button — covers the card, so any click but mute opens the
-              modal. cursor-pointer: buttons default to the arrow; rounded-2xl
-              keeps the inset focus ring inside the rounded clip. */}
+          {/* Play Button — invisible, covers the card, so any click but mute
+              opens the modal. cursor-pointer: buttons default to the arrow;
+              rounded-2xl keeps the inset focus ring inside the rounded clip. */}
           <button
             ref={playButtonRef}
             type="button"
             aria-label="Play video: Discover VRS Realinvest"
             onClick={openModal}
-            className="absolute inset-0 flex items-center justify-center rounded-2xl cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[var(--primary-gold)]"
-          >
-            <PlayCircle
-              size={60}
-              className="text-white opacity-80 group-hover:text-[var(--primary-gold)] transition-all duration-500 group-hover:scale-110 group-hover:opacity-100"
-            />
-          </button>
+            className="absolute inset-0 rounded-2xl cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[var(--primary-gold)]"
+          />
 
           {/* Sound Button — a sibling stacked above the play button, since
               interactive elements can't nest. Visibly labelled while off. */}
