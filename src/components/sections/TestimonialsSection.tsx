@@ -41,10 +41,12 @@ export default function TestimonialsSection() {
   // ── Modal state ──
   const [modalVideo, setModalVideo] = useState<VideoReview | null>(null);
 
+  // watch?v=, youtu.be/, shorts/ and embed/ links; IDs are exactly 11 chars.
+  // Anything else returns null and that card is skipped.
   const getYoutubeId = (url: string): string | null => {
     const regExp =
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/;
-    const match = url.match(regExp);
+      /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})(?![\w-])/;
+    const match = url?.match(regExp);
     return match ? match[1] : null;
   };
 
@@ -317,6 +319,8 @@ export default function TestimonialsSection() {
           if (!modalVideoId) return null;
 
           const modalEmbedUrl = `https://www.youtube.com/embed/${modalVideoId}?autoplay=1&rel=0&modestbranding=1&controls=1`;
+          // Shorts are portrait: 9:16 player, width capped so it fits the viewport height
+          const isShort = /youtube\.com\/shorts\//i.test(modalVideo.youtubeLink);
 
           return (
             <div
@@ -328,7 +332,7 @@ export default function TestimonialsSection() {
 
               {/* Modal Box */}
               <div
-                className="relative w-full max-w-3xl rounded-2xl overflow-hidden border border-[var(--card-border)] shadow-[0_30px_100px_rgba(0,0,0,0.9)] animate-in fade-in zoom-in-95 duration-300"
+                className={`relative w-full ${isShort ? "max-w-[min(24rem,40vh)]" : "max-w-3xl"} rounded-2xl overflow-hidden border border-[var(--card-border)] shadow-[0_30px_100px_rgba(0,0,0,0.9)] animate-in fade-in zoom-in-95 duration-300`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Close Button */}
@@ -340,7 +344,9 @@ export default function TestimonialsSection() {
                 </button>
 
                 {/* Video */}
-                <div className="relative w-full aspect-video bg-black">
+                <div
+                  className={`relative w-full ${isShort ? "aspect-[9/16]" : "aspect-video"} bg-black`}
+                >
                   <iframe
                     src={modalEmbedUrl}
                     className="absolute inset-0 w-full h-full"
