@@ -11,19 +11,19 @@ import Image from "next/image";
 import logo from "@/app/logo/4.png";
 
 export default function Footer() {
-  // Keeps footer content clear of the fixed webinar CTA + chat (bottom-right,
-  // see components/ui/WebinarCta.tsx) once the page is scrolled to the end.
-  // - Pill (default): pb-40 lifts everything above the pill/chat stack (~144px).
-  // - Card (cta-card:): no extra height; instead the content stays out of the
-  //   card's column, 322px from the right edge (24 offset + 274 card + 24).
-  //   With the max-w-6xl (1152px) container centred, that needs
-  //   874px - 50vw of extra right padding: 298px max, 0 from ~1748px wide.
+  // Keeps footer content clear of the fixed WhatsApp + consultation stack
+  // (bottom-right, see components/ui/FloatingIcons.tsx) at the end of the page.
+  // - Below lg: pb-40 lifts everything above the stack (~152px tall).
+  // - lg+: no extra height; instead the content stays out of the stack's
+  //   column, 264px from the right edge (24 offset + 216 wide + 24). With the
+  //   max-w-6xl (1152px) container centred, that needs 816px - 50vw of extra
+  //   right padding: 240px max, 0 from 1632px wide.
   return (
-   <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-40 cta-card:pb-4 overflow-hidden font-body cta-card:[--cta-gutter:clamp(0rem,54.625rem_-_50vw,18.625rem)]">
+   <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-40 lg:pb-4 overflow-hidden font-body lg:[--cta-gutter:clamp(0rem,51rem_-_50vw,15rem)]">
   {/* TOP LINE */}
   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)]/50 to-transparent"></div>
 
-  <div className="max-w-6xl mx-auto px-6 cta-card:pr-[calc(1.5rem+var(--cta-gutter))] grid md:grid-cols-3 gap-8 items-start">
+  <div className="max-w-6xl mx-auto px-6 lg:pr-[calc(1.5rem+var(--cta-gutter))] grid md:grid-cols-3 gap-8 items-start">
 
     {/* COLUMN 1 */}
     <div className="space-y-3">
@@ -95,7 +95,7 @@ export default function Footer() {
   </div>
 
   {/* BOTTOM */}
-  <div className="border-t border-[var(--card-border)] mt-8 pt-3 max-w-6xl mx-auto px-6 cta-card:pr-[calc(1.5rem+var(--cta-gutter))] flex flex-col md:flex-row justify-between items-center gap-1.5 text-[10px] tracking-wide">
+  <div className="border-t border-[var(--card-border)] mt-8 pt-3 max-w-6xl mx-auto px-6 lg:pr-[calc(1.5rem+var(--cta-gutter))] flex flex-col md:flex-row justify-between items-center gap-1.5 text-[10px] tracking-wide">
     <p className="text-gray-500">
       © {new Date().getFullYear()} VRS RealInvest
     </p>

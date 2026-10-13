@@ -4,8 +4,6 @@ import Script from "next/script";
 import ScrollToTop from "@/components/common/ScrollToTop";
 import localFont from "next/font/local";
 
-// GA4 loads only when the measurement ID is provided at build time.
-// Events are fired sparingly and must never carry PII (client requirement).
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 const playfair = localFont({

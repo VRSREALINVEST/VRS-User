@@ -62,13 +62,7 @@ export default function HeroSection() {
   const hasVideo = hero?.type === "video" && hero.video?.url;
 
   return (
-    // data-hide-webinar-cta: the floating webinar CTA (WebinarCtaShell) stays
-    // hidden while this is on screen; it would cover the hero's video/CTAs
-    // and the hero has its own Free Webinar button.
-    <section
-      data-hide-webinar-cta
-      className="relative w-full min-h-screen overflow-hidden bg-[var(--background)]"
-    >
+    <section className="relative w-full min-h-screen overflow-hidden bg-[var(--background)]">
       {/* ================= IMAGES ================= */}
       {hasImages &&
         hero!.images!.map((img, index) => (

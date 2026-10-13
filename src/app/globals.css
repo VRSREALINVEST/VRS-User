@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-/* Viewports with room for the full floating webinar card (WebinarCta);
-   phones, tablets and short windows get the compact pill instead. */
-@custom-variant cta-card (@media (min-width: 1024px) and (min-height: 640px));
-
 /* ============================= */
 /* ROOT THEME */
 /* ============================= */
@@ -248,22 +244,45 @@ body.page-exit {
 }
 
 /* ============================= */
-/* FLOATING WEBINAR CTA */
+/* FLOATING WHATSAPP + CONSULTATION */
 /* ============================= */
 
-/* components/ui/WebinarCta.tsx. Slides in — hidden, not just transparent,
-   until then so it can't be clicked or focused unseen — then two gold ring
-   pulses. All motion ends ~4s after it starts (WCAG 2.2.2) and the page goes
-   idle; the gold CTA itself stays. */
-.webinar-cta {
-  animation: webinarCtaEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
+/* components/ui/FloatingIcons.tsx and ConsultationCta.tsx. Everything here
+   animates transform/opacity only (no layout, no paint of the page) and
+   repeats on an 8s cycle that is idle for ~85% of it, staggered so the two
+   never fire together. All of it is off under prefers-reduced-motion. */
+
+/* Consultation slides in once, hidden (not just transparent) until then so it
+   can't be clicked or focused unseen. backwards: after the entrance the
+   normal styles apply again, so the hover lift still works. */
+.consultation-cta {
+  animation: consultationEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.8s backwards;
 }
 
-.webinar-cta-ring {
-  animation: webinarCtaRing 2.2s ease-out 1.6s 2;
+/* Soft ring expanding from behind the WhatsApp button. */
+.wa-ring {
+  opacity: 0;
+  animation: waRing 8s ease-out 3s infinite;
 }
 
-@keyframes webinarCtaEnter {
+/* Light sweep across the consultation pill. */
+.consultation-shine {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 35%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: consultationShine 8s ease-in-out 7s infinite;
+}
+
+@keyframes consultationEnter {
   from {
     opacity: 0;
     visibility: hidden;
@@ -276,19 +295,41 @@ body.page-exit {
   }
 }
 
-@keyframes webinarCtaRing {
+@keyframes waRing {
   0% {
-    box-shadow: 0 0 0 0 rgba(231, 200, 156, 0.55);
+    opacity: 0.55;
+    transform: scale(1);
   }
-  50%,
+  15%,
   100% {
-    box-shadow: 0 0 0 10px rgba(231, 200, 156, 0);
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes consultationShine {
+  0% {
+    opacity: 0;
+    transform: translateX(-130%) skewX(-12deg);
+  }
+  3% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(400%) skewX(-12deg);
+  }
+  16%,
+  100% {
+    opacity: 0;
+    transform: translateX(400%) skewX(-12deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .webinar-cta,
-  .webinar-cta-ring {
+  .consultation-cta,
+  .wa-ring,
+  .consultation-shine {
     animation: none;
   }
 }
