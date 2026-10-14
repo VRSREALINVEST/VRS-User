@@ -2,7 +2,7 @@ import Image from "next/image";
 import ConsultationCta from "./ConsultationCta";
 
 // Site-wide floating actions, mounted once in app/(public)/layout.tsx: the
-// WhatsApp button on top, the consultation CTA below it, in one fixed
+// consultation CTA on top, the WhatsApp button below it, in one fixed
 // bottom-right stack. Footer.tsx clears the stack's footprint (about 152px
 // tall, 216px wide), so keep it in sync with the sizes here.
 //
@@ -16,6 +16,8 @@ const WHATSAPP_URL = "https://wa.me/61412864050";
 export default function FloatingIcons() {
   return (
     <div className="pointer-events-none fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-[calc(1.5rem+env(safe-area-inset-right))] z-40 flex flex-col items-end gap-5">
+      <ConsultationCta />
+
       {/* The ring is a sibling of the link: the link clips its image
           (overflow-hidden), which would clip the ring too. */}
       <div className="pointer-events-auto relative h-14 w-14">
@@ -51,8 +53,6 @@ export default function FloatingIcons() {
           />
         </a>
       </div>
-
-      <ConsultationCta />
     </div>
   );
 }

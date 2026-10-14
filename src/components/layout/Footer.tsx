@@ -13,13 +13,14 @@ import logo from "@/app/logo/4.png";
 export default function Footer() {
   // Keeps footer content clear of the fixed WhatsApp + consultation stack
   // (bottom-right, see components/ui/FloatingIcons.tsx) at the end of the page.
-  // - Below lg: pb-40 lifts everything above the stack (~152px tall).
+  // - Below lg: pb-40 lifts everything above the stack (~152px tall); the
+  //   safe-area inset is added because the stack's offset includes it.
   // - lg+: no extra height; instead the content stays out of the stack's
   //   column, 264px from the right edge (24 offset + 216 wide + 24). With the
   //   max-w-6xl (1152px) container centred, that needs 816px - 50vw of extra
   //   right padding: 240px max, 0 from 1632px wide.
   return (
-   <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-40 lg:pb-4 overflow-hidden font-body lg:[--cta-gutter:clamp(0rem,51rem_-_50vw,15rem)]">
+   <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-[calc(10rem+env(safe-area-inset-bottom))] lg:pb-4 overflow-hidden font-body lg:[--cta-gutter:clamp(0rem,51rem_-_50vw,15rem)]">
   {/* TOP LINE */}
   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)]/50 to-transparent"></div>
 

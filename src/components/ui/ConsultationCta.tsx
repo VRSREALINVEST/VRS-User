@@ -2,7 +2,7 @@ import { CalendarCheck } from "lucide-react";
 import { CONSULTATION_URL } from "@/lib/links";
 import ConsultationCtaShell from "./ConsultationCtaShell";
 
-// Floating consultation CTA, rendered by FloatingIcons below the WhatsApp
+// Floating consultation CTA, rendered by FloatingIcons above the WhatsApp
 // button.
 //
 // The link is a server component (no client JS). ConsultationCtaShell is the
