@@ -1,18 +1,55 @@
 # VRS RealInvest
 
-## Business Summary
-VRS RealInvest is an Australian buyer's agency and real estate coaching business. We represent buyers and help busy professionals build wealth through strategic Australian real estate investing, providing end-to-end guidance from strategy to settlement.
+> VRS RealInvest Pty Ltd is an Australian buyer's agency and real estate investment coaching business led by founder Sudhesh K Valappil. It represents buyers only (it does not sell property) and helps busy professionals buy low-risk, high-growth investment property anywhere in Australia, with end-to-end guidance from strategy to settlement.
 
-## Details
-- **Company Name**: VRS RealInvest Pty Ltd
-- **Services**: 
-  - Buyer's Agent services
-  - Real estate investment coaching & strategy sessions
-  - Suburb & property research using data and fundamentals
-  - Negotiation & contract review support
-- **Service Locations**: Australia-wide (focusing on low-risk suburbs with owner-occupier demand)
-- **Founder**: Sudhesh K Valappil
-- **Website**: https://www.vrsrealinvest.com.au
-- **Contact Phone**: +61 412 864 050
-- **Contact Email**: sudhesh@vrsrealinvest.com.au
-- **Governing Jurisdiction**: New South Wales (NSW), Australia
+## Key facts
+
+- Business: Buyer's agent (buyer representation) and property investment coaching
+- Legal name: VRS RealInvest Pty Ltd
+- Founder: Sudhesh K Valappil
+- Website: https://www.vrsrealinvest.com.au
+- Phone: +61 412 864 050
+- Email: sudhesh@vrsrealinvest.com.au
+- Based in: New South Wales (NSW), Australia
+- Service area: Australia-wide — NSW, VIC, QLD, WA, SA, TAS and NT
+- Experience: 10+ years; 70+ investment properties secured for clients; 100+ free investor webinars run
+- Who it helps: busy professionals (medical, IT, engineering, business owners), first-time investors, home owners building a portfolio, and families seeking passive income
+- Services: strategy sessions based on goals and borrowing capacity; data-led suburb and property research; shortlisting; risk, rental demand and growth-driver checks; negotiation and contract review support; ongoing portfolio guidance
+- Investment approach: low-risk suburbs with strong owner-occupier demand, strong rental fundamentals and tight vacancy rates, growth backed by infrastructure and supply-demand data, strategy-matched properties rather than hype
+- 10-step process: understanding requirements → formalising the agreement → budget confirmation and loan pre-approval → research and due diligence → suburb presentation → property sourcing → negotiation and contract review → building and pest inspection → contingency management → settlement and handover
+- Note: blog content is general information, not financial, tax or legal advice
+
+## Core pages
+
+- [Home](https://www.vrsrealinvest.com.au/): Overview of VRS RealInvest: buying investment property in Australia with the right strategy, recently secured properties, nationwide coverage, team and client testimonials.
+- [About Us](https://www.vrsrealinvest.com.au/about): Who VRS RealInvest is, who it helps, its buyer-only representation model, investment approach, core values and 10-step buying process from strategy to settlement.
+- [Secured Properties](https://www.vrsrealinvest.com.au/properties): Investment properties VRS RealInvest has successfully secured for its clients across Australia.
+- [Client Reviews](https://www.vrsrealinvest.com.au/review): Written and video testimonials from VRS RealInvest clients about their property investment experience.
+- [Property Investment Webinars](https://www.vrsrealinvest.com.au/webinar): Free webinars on proven strategies for building wealth through Australian property investment.
+- [Contact Us](https://www.vrsrealinvest.com.au/contact): Book a consultation with VRS RealInvest. Phone +61 412 864 050 or email sudhesh@vrsrealinvest.com.au.
+- [Blog: Market Insights & Investment Intelligence](https://www.vrsrealinvest.com.au/blog): All VRS RealInvest articles on Australian property investment, buyer's agents, tax and market updates.
+
+## Blog: property investment guides and market insights
+
+- [Sydney Buyer's Agent: A Complete Guide to Choosing the Right Property Expert](https://www.vrsrealinvest.com.au/blog/sydney-buyers-agent-or-vrs-realinvest): How to choose a Sydney buyer's agent: what they do, why credentials and relevant experience matter, home buyer vs investor strategies, and what to compare between agencies.
+- [Buyer's Agent Sydney: A Research Driven Approach to Investment Property](https://www.vrsrealinvest.com.au/blog/buyers-agent-sydney-a-research-driven-approach-to-investment-property): How a buyer's agent helps property investors, why market research matters more than property excitement, and what to look for in a buyer's agent for investment property.
+- [Best Buyers Agent in Sydney: How to Choose the Right Property Expert](https://www.vrsrealinvest.com.au/blog/best-buyers-agent-in-sydney-or-expert-property-guide): How to pick the best buyer's agent in Sydney: licensing and buyer representation, matching experience to your goal, local property knowledge, and home buyer vs investor needs.
+- [Property Buyers Agent Sydney: Your Complete Guide to Buying Property with Confidence](https://www.vrsrealinvest.com.au/blog/property-buyers-agent-sydney-or-your-complete-guide-to-buying-property-with-confidence): What a property buyer's agent is and does, typical buyer's agent fees in Sydney, off-market properties, and how buyer's agencies work.
+- [Labor to Ban SMSF Lending? What Property Investors Need to Know](https://www.vrsrealinvest.com.au/blog/labor-to-ban-smsf-lending-what-property-investors-need-to-know): Recent reports suggest Labor may prohibit future SMSF borrowing for residential property purchases. Learn what this could mean for property investors, retirement planning, and SMSF property strategies in Australia.
+- [Do You Think Property Prices Are Going to Crash? What Every Property Investor Should Consider](https://www.vrsrealinvest.com.au/blog/do-you-think-property-prices-are-going-to-crash-what-every-property-investor-should-consider): Many Australians are waiting for a property market crash before buying. Learn what property investors should consider, the hidden cost of waiting, and why long-term strategy matters.
+- [Have You Organised Your Property Depreciation Report Yet? A Guide for Australian Property Investors](https://www.vrsrealinvest.com.au/blog/have-you-organised-your-property-depreciation-report-yet-a-guide-for-australian-property-investors): Learn what a property depreciation report is, why Australian property investors discuss depreciation at tax time, and what questions to ask your accountant or financial adviser.
+- [Tax Return Time: 7 Things Property Investors Should Consider Before Lodging Their Tax Return](https://www.vrsrealinvest.com.au/blog/tax-return-time-7-things-property-investors-should-consider-before-lodging-their-tax-return): Seven things Australian property investors should review before lodging a tax return: loan interest, property management statements, repairs vs improvements, depreciation, expense records, rental income and long-term strategy.
+- [Australia's New Anti-Money Laundering Laws 2026: What Property Investors Need to Know](https://www.vrsrealinvest.com.au/blog/australias-new-anti-money-laundering-laws-2026-what-property-investors-need-to-know): Australia's new Anti-Money Laundering laws start in 2026. Learn how the AML reforms affect property investors, home buyers, real estate transactions, and what documents you need to prepare.
+- [Brand New Property vs Existing Property in Australia: Which Is Better for Investors?](https://www.vrsrealinvest.com.au/blog/brand-new-property-vs-existing-property-in-australia-which-is-better-for-investors): Compare brand new and existing properties in Australia. Learn the pros, cons, tax benefits, depreciation, risks, and capital growth potential to make smarter property investment decisions.
+- [7 Costly Property Buying Mistakes Every Australian Investor Should Avoid](https://www.vrsrealinvest.com.au/blog/7-costly-property-buying-mistakes-every-australian-investor-should-avoid): Discover the most common property buying mistakes in Australia and learn how investors can avoid costly errors, improve investment returns, and build long-term wealth through smart property strategies.
+- [How Negative Gearing Changes Could Impact Property Investors in Australia](https://www.vrsrealinvest.com.au/blog/how-negative-gearing-changes-could-impact-property-investors-in-australia): Learn how negative gearing changes may impact Australian property investors with a simple $600K property example, cash-flow numbers and smart investment strategy.
+- [Australian Budget 2026: Negative Gearing Changes Explained for Property Investors](https://www.vrsrealinvest.com.au/blog/australian-budget-2026-negative-gearing-changes-explained-for-property-investors): Learn how the Australian Budget 2026 Negative Gearing changes may impact property investors, renters, homeowners, and first-home buyers in Australia.
+- [Buy or Wait? What’s Really Happening in the Australian Real Estate Market in 2026](https://www.vrsrealinvest.com.au/blog/buy-or-wait-whats-really-happening-in-the-australian-real-estate-market-in-2026): Confused about buying property in 2026? Discover what’s happening in the Australian real estate market and whether you should buy or wait.
+
+## Optional
+
+- [Privacy Policy](https://www.vrsrealinvest.com.au/privacy-policy): Read the VRS Real Invest privacy policy to understand how we collect, use, and protect your personal information.
+- [Terms & Conditions](https://www.vrsrealinvest.com.au/terms-and-conditions): Review the terms and conditions governing the use of the VRS Real Invest website and services.
+- [XML sitemap](https://www.vrsrealinvest.com.au/sitemap.xml): Full list of indexable URLs
+
+Last generated: 2026-10-15
