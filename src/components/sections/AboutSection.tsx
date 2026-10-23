@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { CheckCircle, Shield, Target, TrendingUp } from "lucide-react";
+import { CONSULTATION_URL } from "@/lib/links";
 
 export default function AboutSection() {
   return (
@@ -218,7 +219,7 @@ export default function AboutSection() {
             </p>
 
             <a
-              href="https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session"
+              href={CONSULTATION_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-[11px]  font-medium tracking-[0.18em] uppercase hover:opacity-90 hover:scale-[1.03] active:scale-[0.98] transition"

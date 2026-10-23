@@ -3,6 +3,7 @@ import SecuredProperties from "@/components/sections/SecuredProperties";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import TeamSection from "@/components/sections/TeamSection";
 import NationwideCoverage from "@/components/sections/NationwideCoverage";
+import { CONSULTATION_URL } from "@/lib/links";
 
 // Server component: the sections are client components that fetch their own
 // data, so nothing here waits on an API — the hero text is in the first HTML.
@@ -33,7 +34,7 @@ export default function HomePage() {
             </p>
 
             <a
-              href="https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session"
+              href={CONSULTATION_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition duration-300"

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { FREE_WEBINAR_URL } from "@/lib/links";
+import { CONSULTATION_URL, FREE_WEBINAR_URL } from "@/lib/links";
 import DiscoverVideo from "@/components/sections/DiscoverVideo";
 
 interface ImageItem {
@@ -155,7 +155,7 @@ export default function HeroSection() {
                 so the hydrated DOM never matched the server HTML. inline-block
                 matches the other CTA anchors in the app. */}
             <a
-              href="https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session"
+              href={CONSULTATION_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-9 py-3 text-[11px]  font-medium tracking-[0.22em] uppercase rounded-md border border-[#E7C89C] text-[#E7C89C]

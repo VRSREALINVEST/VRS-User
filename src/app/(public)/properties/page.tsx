@@ -1,4 +1,5 @@
 import SecuredProperties from "@/components/sections/SecuredProperties";
+import { CONSULTATION_URL } from "@/lib/links";
 
 export default function PropertiesPage() {
   return (
@@ -22,7 +23,7 @@ export default function PropertiesPage() {
             </p>
 
             <a
-              href="https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session"
+              href={CONSULTATION_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-6 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition"
