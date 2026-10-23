@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import React from "react";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/blogHtml";
+import { SUDHESH, TEAM, isBySudhesh } from "@/lib/byline";
 
 interface Blog {
   _id: string;
@@ -18,7 +19,6 @@ interface Blog {
   imageTitle?: string;
   publishDate?: string;
   createdAt: string;
-  updatedAt?: string;
 }
 
 const SITE_URL = "https://www.vrsrealinvest.com.au";
@@ -169,7 +169,8 @@ export async function generateMetadata({
       locale: "en_AU",
       type: "article",
       publishedTime: published,
-      modifiedTime: blog.updatedAt || published,
+      // Same as published, for the reason given at dateModified below.
+      modifiedTime: published,
       images: [
         {
           url: blog.image,
@@ -199,6 +200,9 @@ export default async function BlogDetail({
   // instead of a 200 "Blog not found" page (Soft 404).
   if (!blog) notFound();
 
+  const published = blog.publishDate || blog.createdAt;
+  const bySudhesh = isBySudhesh(blog.author);
+
   // ✅ ARTICLE STRUCTURED DATA (schema.org/Article)
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -206,17 +210,27 @@ export default async function BlogDetail({
     headline: blog.title,
     description: blog.metaDescription || blog.excerpt,
     image: blog.image,
-    datePublished: blog.publishDate || blog.createdAt,
-    dateModified: blog.updatedAt || blog.publishDate || blog.createdAt,
+    datePublished: published,
+    // The visible "Published on" date. Posts have no editor-set "Updated"
+    // date yet, and updatedAt changes on every save (a status or image swap
+    // too), so it isn't presented as a content update.
+    dateModified: published,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${SITE_URL}/blog/${blog.slug}`,
     },
-    author: blog.author
-      ? { "@type": "Person", name: blog.author }
+    author: bySudhesh
+      ? {
+          "@type": "Person",
+          "@id": `${SITE_URL}/about#sudhesh`,
+          name: SUDHESH,
+          url: `${SITE_URL}/about#sudhesh`,
+        }
       : {
+          // The Organization node in the root layout's JSON-LD.
           "@type": "Organization",
-          name: "VRS Real Invest",
+          "@id": `${SITE_URL}/#organization`,
+          name: "VRS RealInvest",
           url: SITE_URL,
         },
     publisher: {
@@ -257,14 +271,22 @@ export default async function BlogDetail({
           </h1>
 
           <p className="text-gray-500 text-sm mt-4">
-            {blog.author && (
-              <>
-                <span className="text-gray-400">By {blog.author}</span>
-                <span className="mx-2">·</span>
-              </>
-            )}
+            <span className="text-gray-400">
+              By{" "}
+              {bySudhesh ? (
+                <Link
+                  href="/about#sudhesh"
+                  className="underline underline-offset-4 hover:text-[var(--primary-gold)]"
+                >
+                  {SUDHESH}
+                </Link>
+              ) : (
+                TEAM
+              )}
+            </span>
+            <span className="mx-2">·</span>
             Published on{" "}
-            {new Date(blog.publishDate || blog.createdAt).toLocaleDateString(
+            {new Date(published).toLocaleDateString(
               "en-AU",
               { day: "numeric", month: "long", year: "numeric" },
             )}

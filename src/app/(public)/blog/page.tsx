@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Metadata } from "next";
+import { SUDHESH, TEAM, isBySudhesh } from "@/lib/byline";
 
 interface BlogPost {
   _id: string;
@@ -106,12 +107,10 @@ export default async function BlogPage() {
                           month: "short",
                           year: "numeric",
                         })}
-                        {post.author && (
-                          <span className="normal-case tracking-normal">
-                            {" "}
-                            · By {post.author}
-                          </span>
-                        )}
+                        <span className="normal-case tracking-normal">
+                          {" "}
+                          · By {isBySudhesh(post.author) ? SUDHESH : TEAM}
+                        </span>
                       </p>
 
                       <h2 className="text-lg font-medium mb-3 group-hover:text-[var(--primary-gold)] transition">
