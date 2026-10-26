@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
 const BASE_URL = "https://www.vrsrealinvest.com.au";
 const API = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -9,8 +10,8 @@ export const revalidate = 3600;
 
 interface Blog {
   slug: string;
+  publishDate?: string;
   createdAt: string;
-  updatedAt?: string;
 }
 
 interface SecuredProperty {
@@ -23,40 +24,41 @@ interface SecuredProperty {
 async function fetchJson<T>(path: string): Promise<T[] | null> {
   if (!API) {
     console.error(
-      `[sitemap] NEXT_PUBLIC_API_BASE_URL is not set — ${path} URLs omitted.`,
+      `[sitemap] NEXT_PUBLIC_API_BASE_URL is not set — ${path} not fetched.`,
     );
     return null;
   }
 
+  // Logged in full: Next's error output hides which host and port refused.
+  const url = `${API}${path}`;
   try {
-    const res = await fetch(`${API}${path}`, { next: { revalidate } });
+    const res = await fetch(url, { next: { revalidate } });
 
     if (!res.ok) {
-      console.error(
-        `[sitemap] ${path} responded ${res.status} — URLs omitted.`,
-      );
+      console.error(`[sitemap] ${url} responded ${res.status}.`);
       return null;
     }
 
     return (await res.json()) as T[];
   } catch (err) {
-    console.error(`[sitemap] ${path} fetch failed — URLs omitted.`, err);
+    console.error(`[sitemap] ${url} fetch failed.`, err);
     return null;
   }
 }
 
-// Most recent updatedAt (falling back to createdAt) across a set of documents.
-function latestTimestamp(
-  items: Array<{ createdAt: string; updatedAt?: string }>,
-): Date {
-  if (!items.length) return new Date();
-  const newest = Math.max(
-    ...items.map((item) =>
-      new Date(item.updatedAt ?? item.createdAt).getTime(),
-    ),
-  );
-  return Number.isFinite(newest) ? new Date(newest) : new Date();
+// The newest valid date, or undefined. A page without a reliable date leaves
+// lastModified out rather than claiming "now" on every regeneration, which
+// crawlers learn to ignore.
+function newest(dates: Array<string | undefined>): Date | undefined {
+  const times = dates
+    .map((date) => new Date(date ?? "").getTime())
+    .filter(Number.isFinite);
+  return times.length ? new Date(Math.max(...times)) : undefined;
 }
+
+// Posts are dated by publication: updatedAt also moves when only the status or
+// image is saved, so it isn't a content change.
+const published = (post: Blog) => post.publishDate ?? post.createdAt;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [blogs, properties] = await Promise.all([
@@ -64,11 +66,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     fetchJson<SecuredProperty>("/api/secured-properties"),
   ]);
 
+  // Only the two listings have a reliable date (from their data). The other
+  // pages have no record of when their content last changed, so they carry
+  // no lastModified. /strategy-session stays out: it is noindex and unlinked.
   const staticPages: MetadataRoute.Sitemap = [
     {
       // Trailing slash to match the homepage canonical exactly.
       url: `${BASE_URL}/`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1.0,
     },
@@ -76,55 +80,63 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // Properties render on a single listing page (no per-property routes),
       // so its lastModified tracks the most recently updated property.
       url: `${BASE_URL}/properties`,
-      lastModified: latestTimestamp(properties ?? []),
+      lastModified: newest(
+        (properties ?? []).map((item) => item.updatedAt ?? item.createdAt),
+      ),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
+      // The listing changes when a post is published.
       url: `${BASE_URL}/blog`,
-      lastModified: latestTimestamp(blogs ?? []),
+      lastModified: newest((blogs ?? []).map(published)),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${BASE_URL}/webinar`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${BASE_URL}/about`,
-      lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.7,
     },
     {
       url: `${BASE_URL}/review`,
-      lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${BASE_URL}/contact`,
-      lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.6,
     },
     {
       url: `${BASE_URL}/privacy-policy`,
-      lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${BASE_URL}/terms-and-conditions`,
-      lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.3,
     },
   ];
 
   if (blogs === null) {
+    // Outside `next build`, throw: a production server then keeps serving its
+    // last good sitemap and retries 30 s later (next dev shows the error). The
+    // build has no earlier copy, so it ships the static pages and says so. (A
+    // failed property list only drops the /properties date, so it doesn't
+    // hold back new blog URLs.)
+    if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+      throw new Error(
+        "[sitemap] Blog list unavailable — not regenerated; a production " +
+          "server keeps serving its last good sitemap.",
+      );
+    }
     console.error(
       "[sitemap] Serving static pages only — blog URLs are MISSING. Check the " +
         "API; the sitemap self-repairs on the next revalidation.",
@@ -136,7 +148,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((post) => Boolean(post.slug))
     .map((post) => ({
       url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.updatedAt ?? post.createdAt),
+      lastModified: newest([published(post)]),
       changeFrequency: "monthly",
       priority: 0.7,
     }));

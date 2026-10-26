@@ -1,16 +1,20 @@
 import { Metadata } from "next";
 
+// Page Copy v2 §5. The title already ends with the brand, so the root
+// layout's "%s | VRS Real Invest" template must not add it again.
+const TITLE = "Free Property Investment Webinars | VRS Realinvest";
+const DESCRIPTION =
+  "Free property investment webinars for Australian investors. Learn how to assess a property before you buy, then register for a time that suits you.";
+
 export const metadata: Metadata = {
-  title: "Property Investment Webinar",
-  description:
-    "Join the VRS Real Invest webinar to learn proven strategies for building wealth through Australian property investment.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: {
     canonical: "/webinar",
   },
   openGraph: {
-    title: "Property Investment Webinar | VRS Real Invest",
-    description:
-      "Join the VRS Real Invest webinar to learn proven strategies for building wealth through Australian property investment.",
+    title: TITLE,
+    description: DESCRIPTION,
     url: "https://www.vrsrealinvest.com.au/webinar",
     siteName: "VRS Real Invest",
     locale: "en_AU",

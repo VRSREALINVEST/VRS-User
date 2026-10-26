@@ -1,13 +1,17 @@
 import AboutSection from "@/components/sections/AboutSection";
 import TeamSection from "@/components/sections/TeamSection";
+import { getTeam } from "@/lib/publicContent";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const team = await getTeam();
+
   return (
     <>
-      <main className="flex-1 pt-10 text-white">
+      {/* A div: the (public) layout already provides <main>. */}
+      <div className="flex-1 pt-10 text-white">
         <AboutSection />
-        <TeamSection />
-      </main>
+        <TeamSection members={team} />
+      </div>
     </>
   );
 }

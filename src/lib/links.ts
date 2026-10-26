@@ -6,3 +6,7 @@ export const FREE_WEBINAR_URL =
 // from here, so the booking destination is changed in this one place.
 export const CONSULTATION_URL =
   "https://calendly.com/sudhesh-vrsrealinvest/one-on-one-session";
+
+// WhatsApp chat (number confirmed by Sudhesh). wa.me takes the number as
+// country code + digits only.
+export const WHATSAPP_URL = "https://wa.me/61412864050";

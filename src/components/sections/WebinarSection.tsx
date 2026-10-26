@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Calendar, Clock, Video } from "lucide-react";
+import { Video } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+// No day, time or time zone on the public page (client requirement): visitors
+// see the available sessions after they click through to register.
 interface Webinar {
   _id: string;
   title: string;
-  day: string;
-  time: string;
-  australiaTimeZone: string;
   description: string;
   meetLink: string;
 }
@@ -33,16 +32,6 @@ export default function WebinarSection() {
     if (API) fetchWebinars();
   }, []);
 
-  // FORMAT TIME
-  const formatTime = (time: string) => {
-    const [hour, minute] = time.split(":");
-    const h = parseInt(hour);
-    const ampm = h >= 12 ? "PM" : "AM";
-    const formattedHour = h % 12 || 12;
-
-    return `${formattedHour}:${minute} ${ampm}`;
-  };
-
   // The section header always renders so /webinar has real server-side content
   // (it previously returned null until the client fetch resolved, leaving the
   // page empty for crawlers). Only the cards below depend on fetched data.
@@ -52,18 +41,28 @@ export default function WebinarSection() {
       <div className="absolute inset-0 pointer-events-none" />
 
       <div className="relative max-w-4xl mx-auto px-6 text-center">
-        {/* HEADER */}
+        {/* HEADER: Page Copy v2 §5 H1 and intro */}
         <div className="mb-10">
           <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mx-auto mb-5 opacity-80"></div>
 
-          <h2 className="xt-xl md:text-3xl font-medium text-white tracking-[-0.01em]">
-            Exclusive Investment Webinars
-          </h2>
+          <h1 className="text-3xl md:text-5xl font-medium leading-tight tracking-tight text-white">
+            Free Property Investment Webinars
+          </h1>
 
-          <p className=" text-gray-400 mt-3 text-[11px] tracking-[0.18em] uppercase">
-            Premium real estate insights across Australia
+          <p className="text-gray-400 mt-5 max-w-2xl mx-auto text-sm md:text-base leading-relaxed tracking-wide">
+            Learn how to assess an investment property before you buy. Our free
+            webinars explain how we look at rental demand, vacancy,
+            affordability, supply, comparable sales and ownership costs, so you
+            can make your own informed decisions. Every session is general
+            education, not personal financial advice.
           </p>
         </div>
+
+        {webinars.length > 0 && (
+          <h2 className="mb-6 text-2xl md:text-3xl font-medium text-white tracking-[-0.01em]">
+            Upcoming webinars
+          </h2>
+        )}
 
         {/* CARDS */}
         <div className="space-y-6">
@@ -80,26 +79,6 @@ export default function WebinarSection() {
 
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mx-auto my-4 opacity-70"></div>
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mx-auto my-4 opacity-70"></div>
-
-                {/* DAY */}
-                <div className="flex items-center justify-center gap-2.5 mb-3 text-gray-300 text-sm">
-                  <Calendar size={14} className="text-[var(--primary-gold)]" />
-
-                  <span className=" text-white text-[11px] tracking-[0.18em] uppercase">
-                    {webinar.day}
-                  </span>
-                </div>
-
-                {/* TIME */}
-                <div className="flex items-center justify-center gap-2.5 mb-4 text-gray-300 text-sm">
-                  <Clock size={14} className="text-[var(--primary-gold)]" />
-                  <span className=" text-white text-[11px] tracking-[0.18em] uppercase">
-                    {formatTime(webinar.time)}{" "}
-                    <span className="text-[var(--primary-gold)]">
-                      {webinar.australiaTimeZone}
-                    </span>
-                  </span>
-                </div>
 
                 {/* PLATFORM */}
                 <div className="flex items-center justify-center gap-2.5 text-gray-400 text-xs mb-4">

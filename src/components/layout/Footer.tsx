@@ -37,7 +37,17 @@ export default function Footer() {
       />
 
       <p className="text-[11px] leading-relaxed text-gray-400 max-w-xs tracking-wide">
-        Trusted real estate investment partner across Australia.
+        Investment property buyer’s agent and property education,
+        Australia-wide. Create Real Freedom™.
+      </p>
+
+      {/* Confirmed public business details (Dev Tasks §1). */}
+      <p className="text-[11px] leading-relaxed text-gray-500 tracking-wide">
+        VRS Realinvest Pty Ltd
+        <br />
+        Licence no. 20496430
+        <br />
+        ABN 21 688 632 760
       </p>
 
       <div className="flex gap-2 pt-1">

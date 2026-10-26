@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { WHATSAPP_URL } from "@/lib/links";
 import ConsultationCta from "./ConsultationCta";
 
 // Site-wide floating actions, mounted once in app/(public)/layout.tsx: the
@@ -9,9 +10,6 @@ import ConsultationCta from "./ConsultationCta";
 // z-40 keeps the stack over page content but under the navbar/mobile menu and
 // page modals (z-50). The container never takes clicks itself; each child opts
 // back in, so the gap between them can't block the page.
-
-// wa.me takes the number as country code + digits only.
-const WHATSAPP_URL = "https://wa.me/61412864050";
 
 export default function FloatingIcons() {
   return (

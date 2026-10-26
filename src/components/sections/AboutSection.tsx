@@ -24,9 +24,11 @@ export default function AboutSection() {
         <div className="max-w-lg mx-auto md:mx-0 text-center md:text-left flex flex-col justify-center">
           <div className="w-20 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mb-6 opacity-80 mx-auto md:mx-0" />
 
-          <h2 className=" text-4xl md:text-5xl font-medium leading-[1.1] tracking-[-0.015em]">
-            Create Real Freedom with Smart Property Investing
-          </h2>
+          {/* Page Copy v2 §4 H1. The opening paragraph that replaces the text
+              below waits on two claims Sudhesh hasn't confirmed yet. */}
+          <h1 className=" text-4xl md:text-5xl font-medium leading-[1.1] tracking-[-0.015em]">
+            About VRS Realinvest
+          </h1>
 
           <p className=" text-gray-300 text-base md:text-lg leading-relaxed tracking-wide mt-6">
             At{" "}
@@ -53,25 +55,24 @@ export default function AboutSection() {
         </div>
       </div>
 
-      {/* ================= STATS ================= */}
-      <div className="bg-[var(--card-bg)] py-16 border-y border-[var(--card-border)] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      {/* ================= FACTS STRIP ================= */}
+      {/* Page Copy v2 §4: the old counters stay off the page until each one is
+          evidenced, so only the confirmed business details are shown. */}
+      <div className="bg-[var(--card-bg)] py-12 border-y border-[var(--card-border)] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+        {/* Non-breaking spaces keep each number on one line. */}
+        <ul className="max-w-5xl mx-auto px-6 flex flex-col items-center gap-4 text-center md:flex-row md:justify-center md:gap-16">
           {[
-            { number: "70+", label: "Sold Properties" },
-            { number: "50+", label: "Happy Clients" },
-            { number: "250+", label: "5-Star Google Reviews" },
-            { number: "100+", label: "Free Webinars Conducted" },
-          ].map((stat, i) => (
-            <div key={i}>
-              <h3 className=" text-4xl font-medium tracking-tight text-[var(--primary-gold)]">
-                {stat.number}
-              </h3>
-              <p className=" text-gray-400 mt-2 text-xs tracking-[0.22em] uppercase">
-                {stat.label}
-              </p>
-            </div>
+            "Licence no. 20496430",
+            "VRS Realinvest Pty Ltd · ABN 21 688 632 760",
+          ].map((fact) => (
+            <li
+              key={fact}
+              className=" text-base md:text-lg font-medium tracking-wide text-[var(--primary-gold)]"
+            >
+              {fact}
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
 
       {/* ================= WHO WE HELP ================= */}
@@ -101,7 +102,7 @@ export default function AboutSection() {
       </SectionWrapper>
 
       {/* ================= OUR APPROACH ================= */}
-      <SectionWrapper title="Our Approach (Simple, Practical, Low-Risk)">
+      <SectionWrapper title="Our Approach: Simple, Practical, Lower-Risk Selection">
         <List
           items={[
             "Low-risk suburbs with strong owner-occupier demand",
@@ -151,19 +152,18 @@ export default function AboutSection() {
       </SectionWrapper>
 
       {/* ================= WHY CHOOSE US ================= */}
+      {/* "10+ Years Experience" is off until Sudhesh confirms his verified
+          experience (Page Copy v2 §4). */}
       <SectionWrapper title="Why Choose Us">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           <Feature icon={<Shield />} title="Trusted & Verified">
             Transparent, compliant, and buyer-focused process.
           </Feature>
           <Feature icon={<Target />} title="Personalised Strategy">
             Tailored to your age, goals, and financial position.
           </Feature>
-          <Feature icon={<TrendingUp />} title="High ROI Focus">
+          <Feature icon={<TrendingUp />} title="Long-term focus">
             Secure investment-grade assets with long-term performance.
-          </Feature>
-          <Feature icon={<CheckCircle />} title="10+ Years Experience">
-            Proven negotiation skills & market expertise.
           </Feature>
         </div>
       </SectionWrapper>
@@ -209,9 +209,9 @@ export default function AboutSection() {
       <section className="px-6 py-20 md:py-24">
         <div className="max-w-4xl mx-auto">
           <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-8 md:p-12 text-center shadow-xl">
-            <h3 className=" text-2xl md:text-4xl font-medium tracking-[-0.01em]">
+            <h2 className=" text-2xl md:text-4xl font-medium tracking-[-0.01em]">
               Ready to Start Your Investment Journey?
-            </h3>
+            </h2>
 
             <p className=" text-gray-400 mb-6 text-sm md:text-base tracking-wide leading-relaxed max-w-xl mx-auto">
               Partner with VRS Real Invest and secure premium real estate
@@ -235,14 +235,15 @@ export default function AboutSection() {
 
 /* ================= HELPERS ================= */
 
+// Section headings are h2 under the page's h1; Feature cards are h3 inside them.
 function SectionWrapper({ title, children }: any) {
   return (
     <section className="max-w-7xl mx-auto px-6 py-20 md:py-24">
       <div className="mb-12 text-center">
         <div className="relative inline-block">
-          <h3 className=" text-3xl md:text-4xl font-medium tracking-[-0.01em]">
+          <h2 className=" text-3xl md:text-4xl font-medium tracking-[-0.01em]">
             {title}
-          </h3>
+          </h2>
 
           <span className="absolute left-1/2 -translate-x-1/2 bottom-[-10px] w-16 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent opacity-80"></span>
         </div>
@@ -275,7 +276,7 @@ function Feature({ icon, title, children }: any) {
   return (
     <div className="bg-[var(--card-bg)] p-6 rounded-2xl border border-[var(--card-border)] hover:border-[var(--primary-gold)]/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition">
       <div className="text-[var(--primary-gold)] mb-4">{icon}</div>
-      <h4 className=" text-lg font-medium tracking-tight">{title}</h4>
+      <h3 className=" text-lg font-medium tracking-tight">{title}</h3>
       <p className=" text-gray-400 text-sm md:text-base tracking-wide leading-relaxed">
         {children}
       </p>

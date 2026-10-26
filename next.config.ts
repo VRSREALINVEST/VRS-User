@@ -14,6 +14,21 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.pexels.com",
       },
+      // Admin uploads (property covers and galleries, team photos) are stored
+      // in this Cloudinary account as full-size originals; next/image resizes
+      // them. Limited to the account so the optimiser isn't an open proxy.
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dxhdoypy0/**",
+      },
+      // YouTube's video stills, shown as click-to-play thumbnails. Served from
+      // this site, so a visitor's browser contacts YouTube only after Play.
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        pathname: "/vi/**",
+      },
     ],
   },
 

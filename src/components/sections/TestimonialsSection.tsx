@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import useNearViewport from "@/lib/useNearViewport";
-import {
-  Star,
-  ChevronLeft,
-  ChevronRight,
-  Quote,
-  Volume2,
-  VolumeX,
-  X,
-} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { Star, ChevronLeft, ChevronRight, Quote, Play } from "lucide-react";
+import VideoModal from "@/components/common/VideoModal";
+import { youtubeId, youtubeThumbnail } from "@/lib/youtube";
 
-interface TextReview {
+export interface TextReview {
   _id: string;
   name: string;
   location: string;
@@ -20,63 +14,37 @@ interface TextReview {
   rating: number;
 }
 
-interface VideoReview {
+export interface VideoReview {
   _id: string;
   name: string;
   role: string;
   youtubeLink: string;
 }
 
-export default function TestimonialsSection() {
-  const API = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-  const [reviews, setReviews] = useState<TextReview[]>([]);
-  const [videos, setVideos] = useState<VideoReview[]>([]);
+// The page fetches both lists on the server (lib/publicContent) and passes them
+// in, so every testimonial is in the initial HTML; null (the API failed) leaves
+// the headings without cards. Videos are click to play: each card shows the
+// video's thumbnail and a Play button, and the YouTube player loads only in the
+// modal after a click. The first heading is an h2 under the homepage's own h1;
+// /review has no other heading, so it passes headingLevel="h1" there.
+export default function TestimonialsSection({
+  reviews: reviewList,
+  videos: videoList,
+  headingLevel: Heading = "h2",
+}: {
+  reviews: TextReview[] | null;
+  videos: VideoReview[] | null;
+  headingLevel?: "h1" | "h2";
+}) {
+  const reviews = reviewList ?? [];
+  const videos = videoList ?? [];
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
-  const [mutedVideos, setMutedVideos] = useState<{ [key: string]: boolean }>(
-    {},
-  );
 
   // ── Modal state ──
   const [modalVideo, setModalVideo] = useState<VideoReview | null>(null);
-
-  // watch?v=, youtu.be/, shorts/ and embed/ links; IDs are exactly 11 chars.
-  // Anything else returns null and that card is skipped.
-  const getYoutubeId = (url: string): string | null => {
-    const regExp =
-      /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})(?![\w-])/;
-    const match = url?.match(regExp);
-    return match ? match[1] : null;
-  };
-
-  const [sectionRef, near] = useNearViewport<HTMLElement>();
-
-  useEffect(() => {
-    if (!API || !near) return;
-
-    const fetchText = async () => {
-      const res = await fetch(`${API}/api/text-testimonials`);
-      if (!res.ok) return;
-      const data = await res.json();
-      setReviews(data);
-    };
-
-    const fetchVideos = async () => {
-      const res = await fetch(`${API}/api/video-testimonials`);
-      if (!res.ok) return;
-      const data = await res.json();
-      setVideos(data);
-      const muteState: any = {};
-      data.forEach((v: VideoReview) => {
-        muteState[v._id] = true;
-      });
-      setMutedVideos(muteState);
-    };
-
-    fetchText().catch(console.error);
-    fetchVideos().catch(console.error);
-  }, [API, near]);
+  // The Play button that opened the modal gets focus back when it closes.
+  const playButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Auto-slide
   useEffect(() => {
@@ -85,47 +53,25 @@ export default function TestimonialsSection() {
       setIndex((prev) => (prev + 1) % reviews.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [reviews]);
-
-  // Body scroll lock when modal open
-  useEffect(() => {
-    document.body.style.overflow = modalVideo ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [modalVideo]);
+  }, [reviews.length]);
 
   const prevSlide = () =>
     setIndex((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
   const nextSlide = () => setIndex((prev) => (prev + 1) % reviews.length);
 
-  const sendCommand = (id: string, command: string) => {
-    const iframe = document.getElementById(id) as HTMLIFrameElement;
-    iframe?.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func: command, args: [] }),
-      "*",
-    );
-  };
+  // Stable identity, since the modal's Escape listener depends on it
+  const closeModal = useCallback(() => {
+    setModalVideo(null);
+    playButtonRef.current?.focus();
+  }, []);
 
-  const toggleMute = (videoId: string, iframeId: string) => {
-    const isMuted = mutedVideos[videoId];
-    sendCommand(iframeId, isMuted ? "unMute" : "mute");
-    setMutedVideos((prev) => ({ ...prev, [videoId]: !isMuted }));
-  };
-
-  const openModal = (video: VideoReview) => {
-    // pause the thumbnail preview
-    const iframeId = `preview-${video._id}`;
-    sendCommand(iframeId, "pauseVideo");
-    setModalVideo(video);
-  };
-
-  const closeModal = () => setModalVideo(null);
+  const modalVideoId = modalVideo && youtubeId(modalVideo.youtubeLink);
+  const modalIsShort =
+    !!modalVideo && /youtube\.com\/shorts\//i.test(modalVideo.youtubeLink);
 
   return (
     <>
       <section
-        ref={sectionRef}
         className={`relative py-20 text-center transition-all duration-300 ${
           modalVideo ? "blur-sm brightness-50" : ""
         }`}
@@ -134,9 +80,9 @@ export default function TestimonialsSection() {
           {/* ================= TEXT TESTIMONIALS ================= */}
           <div className="text-center mb-12">
             <div className="w-10 h-[2px] bg-[var(--primary-gold)] mx-auto mb-3"></div>
-            <h2 className="text-2xl md:text-3xl font-medium text-white tracking-[-0.01em]">
+            <Heading className="text-2xl md:text-3xl font-medium text-white tracking-[-0.01em]">
               Client Testimonials
-            </h2>
+            </Heading>
             <p className="text-gray-400 mt-3 text-[11px] tracking-[0.18em] uppercase">
               What our satisfied clients say about us
             </p>
@@ -186,9 +132,11 @@ export default function TestimonialsSection() {
                           </button>
                         )}
                       </div>
-                      <h4 className="text-white font-medium text-sm md:text-base tracking-tight">
+                      {/* Author names are attribution, not headings; the class
+                          keeps the heading font the h4 used to give them. */}
+                      <p className="font-[family-name:var(--font-heading)] text-white font-medium text-sm md:text-base tracking-tight">
                         {review.name}
-                      </h4>
+                      </p>
                       <p className="text-gray-500 text-[10px] mt-2 tracking-[0.15em] uppercase">
                         {review.location}
                       </p>
@@ -242,38 +190,22 @@ export default function TestimonialsSection() {
 
               <div className="video-scroll flex gap-6 overflow-x-auto pb-4">
                 {videos.map((video) => {
-                  const videoId = getYoutubeId(video.youtubeLink);
+                  const videoId = youtubeId(video.youtubeLink);
                   if (!videoId) return null;
-
-                  const iframeId = `preview-${video._id}`;
 
                   return (
                     <div
                       key={video._id}
-                      onClick={() => openModal(video)} // ← Modal instead of YouTube
-                      className="relative min-w-[320px] md:min-w-[340px] h-[360px] md:h-[380px] rounded-2xl overflow-hidden border border-[var(--card-border)] group flex-shrink-0 cursor-pointer"
+                      className="relative min-w-[320px] md:min-w-[340px] h-[360px] md:h-[380px] rounded-2xl overflow-hidden border border-[var(--card-border)] group flex-shrink-0"
                     >
-                      <iframe
-                        id={iframeId}
-                        title={`${video.name} — video testimonial`}
-                        loading="lazy"
-                        className="absolute inset-0 w-full h-full"
-                        src={`https://www.youtube.com/embed/${videoId}?enablejsapi=1&controls=0&rel=0&modestbranding=1&mute=1`}
-                        allow="autoplay; encrypted-media"
-                      />
-
-                      {/* Hover play/pause layer */}
-                      <div
-                        className="absolute inset-0 z-20"
-                        onMouseEnter={() => sendCommand(iframeId, "playVideo")}
-                        onMouseLeave={() => {
-                          sendCommand(iframeId, "pauseVideo");
-                          sendCommand(iframeId, "mute");
-                          setMutedVideos((prev) => ({
-                            ...prev,
-                            [video._id]: true,
-                          }));
-                        }}
+                      {/* Thumbnail: YouTube's still, served resized from this
+                          site by next/image and lazy-loaded */}
+                      <Image
+                        src={youtubeThumbnail(videoId)}
+                        alt=""
+                        fill
+                        sizes="(min-width: 768px) 340px, 320px"
+                        className="object-cover"
                       />
 
                       {/* Overlay */}
@@ -281,27 +213,31 @@ export default function TestimonialsSection() {
 
                       {/* Name & Role */}
                       <div className="absolute bottom-5 left-5 text-white z-10">
-                        <h4 className="text-base font-medium tracking-tight">
+                        <p className="font-[family-name:var(--font-heading)] text-base font-medium tracking-tight">
                           {video.name}
-                        </h4>
+                        </p>
                         <p className="text-gray-300 text-[10px] tracking-[0.15em] uppercase">
                           {video.role}
                         </p>
                       </div>
 
-                      {/* Mute Button */}
+                      {/* Play: covers the card, so a click anywhere (or Enter
+                          or Space on focus) opens the player */}
                       <button
+                        type="button"
+                        aria-label={`Play video testimonial from ${video.name}`}
                         onClick={(e) => {
-                          e.stopPropagation();
-                          toggleMute(video._id, iframeId);
+                          playButtonRef.current = e.currentTarget;
+                          setModalVideo(video);
                         }}
-                        className="absolute top-4 right-4 z-30 bg-black/60 p-2 rounded-full hover:bg-black/80 transition"
+                        className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-[var(--primary-gold)]"
                       >
-                        {mutedVideos[video._id] ? (
-                          <VolumeX size={18} className="text-white" />
-                        ) : (
-                          <Volume2 size={18} className="text-white" />
-                        )}
+                        <span
+                          aria-hidden="true"
+                          className="flex h-14 w-14 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition duration-300 group-hover:bg-[var(--primary-gold)] group-hover:text-[#221F1F]"
+                        >
+                          <Play size={22} className="ml-0.5 fill-current" />
+                        </span>
                       </button>
                     </div>
                   );
@@ -312,64 +248,30 @@ export default function TestimonialsSection() {
         </div>
       </section>
 
-      {/* ── VIDEO MODAL ── */}
-      {modalVideo &&
-        (() => {
-          const modalVideoId = getYoutubeId(modalVideo.youtubeLink);
-          if (!modalVideoId) return null;
-
-          const modalEmbedUrl = `https://www.youtube.com/embed/${modalVideoId}?autoplay=1&rel=0&modestbranding=1&controls=1`;
-          // Shorts are portrait: 9:16 player, width capped so it fits the viewport height
-          const isShort = /youtube\.com\/shorts\//i.test(modalVideo.youtubeLink);
-
-          return (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8"
-              onClick={closeModal}
-            >
-              {/* Backdrop */}
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
-
-              {/* Modal Box */}
-              <div
-                className={`relative w-full ${isShort ? "max-w-[min(24rem,40vh)]" : "max-w-3xl"} rounded-2xl overflow-hidden border border-[var(--card-border)] shadow-[0_30px_100px_rgba(0,0,0,0.9)] animate-in fade-in zoom-in-95 duration-300`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Close Button */}
-                <button
-                  onClick={closeModal}
-                  className="absolute top-3 right-3 z-10 bg-black/70 backdrop-blur-sm p-2 rounded-full text-white hover:bg-[var(--primary-gold)] hover:text-black transition-all duration-300"
-                >
-                  <X size={20} />
-                </button>
-
-                {/* Video */}
-                <div
-                  className={`relative w-full ${isShort ? "aspect-[9/16]" : "aspect-video"} bg-black`}
-                >
-                  <iframe
-                    src={modalEmbedUrl}
-                    className="absolute inset-0 w-full h-full"
-                    allow="autoplay; encrypted-media; fullscreen"
-                    allowFullScreen
-                  />
-                </div>
-
-                {/* Name & Role below video */}
-                <div className="bg-[var(--card-bg)] px-5 py-3 flex items-center gap-3 border-t border-[var(--card-border)]">
-                  <div>
-                    <h4 className="text-white text-sm font-medium tracking-tight">
-                      {modalVideo.name}
-                    </h4>
-                    <p className="text-gray-400 text-[10px] tracking-[0.15em] uppercase">
-                      {modalVideo.role}
-                    </p>
-                  </div>
-                </div>
+      {/* ── VIDEO MODAL ── Shorts are portrait: a 9:16 player, width capped so
+          it fits the viewport height */}
+      {modalVideo && modalVideoId && (
+        <VideoModal
+          videoId={modalVideoId}
+          label={`${modalVideo.name} — video testimonial`}
+          portrait={modalIsShort}
+          boxClassName={modalIsShort ? "max-w-[min(24rem,40vh)]" : "max-w-3xl"}
+          onClose={closeModal}
+          caption={
+            /* Name & Role below video */
+            <div className="bg-[var(--card-bg)] px-5 py-3 flex items-center gap-3 border-t border-[var(--card-border)]">
+              <div>
+                <p className="font-[family-name:var(--font-heading)] text-white text-sm font-medium tracking-tight">
+                  {modalVideo.name}
+                </p>
+                <p className="text-gray-400 text-[10px] tracking-[0.15em] uppercase">
+                  {modalVideo.role}
+                </p>
               </div>
             </div>
-          );
-        })()}
+          }
+        />
+      )}
     </>
   );
 }

@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { CheckCircle } from "lucide-react";
-import axios from "axios";
-import useNearViewport from "@/lib/useNearViewport";
 
-interface SecuredProperty {
+export interface SecuredProperty {
   _id: string;
   title: string;
   coverImage: string;
@@ -16,16 +15,23 @@ interface SecuredProperty {
   currentPrice: string;
 }
 
-// ponytail: module-level cache — the section renders on both / and /properties,
-// so navigating between them reuses the data instead of refetching. Refreshes on
-// full page load; fine for admin-curated data that changes rarely.
-let propertiesCache: SecuredProperty[] | null = null;
-
-export default function SecuredProperties() {
-  const [securedProperties, setSecuredProperties] = useState<SecuredProperty[]>(
-    propertiesCache ?? [],
-  );
-  const [loading, setLoading] = useState(propertiesCache === null);
+// The page fetches the list on the server (lib/publicContent) and passes it in,
+// so the cards are in the initial HTML; null (the API failed) leaves the
+// heading without cards. The section heading is an h2 under the homepage's own
+// h1; /properties has no other heading, so it passes headingLevel="h1" there.
+export default function SecuredProperties({
+  properties,
+  headingLevel: Heading = "h2",
+  eagerImages = 0,
+}: {
+  properties: SecuredProperty[] | null;
+  headingLevel?: "h1" | "h2";
+  // Covers that load straight away; only where the cards are above the fold.
+  eagerImages?: number;
+}) {
+  const securedProperties = properties ?? [];
+  // Card titles sit one level below the section heading.
+  const CardHeading = Heading === "h1" ? "h2" : "h3";
   const [selectedProperty, setSelectedProperty] =
     useState<SecuredProperty | null>(null);
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -35,47 +41,48 @@ export default function SecuredProperties() {
   const pauseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isPausedRef = useRef(false);
 
-  const API = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-  // Directly below the hero on "/": wait for an actual scroll (margin 0),
-  // since the cover images are large and would compete with the hero.
-  const [sectionRef, near] = useNearViewport<HTMLElement>("0px");
-
-  // ================= FETCH =================
-  useEffect(() => {
-    if (propertiesCache || !near) return;
-
-    const fetchProperties = async () => {
-      try {
-        const res = await axios.get(`${API}/api/secured-properties`);
-        propertiesCache = res.data;
-        setSecuredProperties(res.data);
-      } catch (error) {
-        console.error("Error fetching secured properties:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, [API, near]);
-
   // ================= AUTO SCROLL =================
+  // 18 px a second, rightwards, wrapping to the start at the end: the old
+  // 0.3 px per frame at 60 fps. Chrome drops scrollLeft changes under a pixel,
+  // so that never moved; distance now builds up from elapsed time and is
+  // applied in whole pixels. Moves only while the carousel is on screen, never
+  // for visitors who prefer reduced motion, and pauses 2 s after any wheel,
+  // touch or mouse interaction.
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
-    const speed = 0.3;
+    const pxPerSecond = 18;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let onScreen = false;
+    let pending = 0;
+    let last: number | null = null;
 
-    const animate = () => {
-      if (!isPausedRef.current) {
-        container.scrollLeft += speed;
+    const observer = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+    });
+    observer.observe(container);
 
-        if (
-          container.scrollLeft + container.clientWidth >=
-          container.scrollWidth
-        ) {
-          container.scrollLeft = 0;
+    const animate = (now: number) => {
+      // Capped, so a frame after the tab was hidden doesn't jump ahead.
+      const elapsed = last === null ? 0 : Math.min(now - last, 100);
+      last = now;
+
+      if (onScreen && !isPausedRef.current && !reducedMotion.matches) {
+        pending += (pxPerSecond * elapsed) / 1000;
+        const step = Math.floor(pending);
+
+        if (step > 0) {
+          pending -= step;
+
+          if (
+            container.scrollLeft + container.clientWidth >=
+            container.scrollWidth - 1
+          ) {
+            container.scrollLeft = 0;
+          } else {
+            container.scrollLeft += step;
+          }
         }
       }
 
@@ -104,12 +111,13 @@ export default function SecuredProperties() {
       if (animationRef.current !== null)
         cancelAnimationFrame(animationRef.current);
       if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current);
+      observer.disconnect();
 
       container.removeEventListener("wheel", pauseScroll);
       container.removeEventListener("touchstart", pauseScroll);
       container.removeEventListener("mousedown", pauseScroll);
     };
-  }, [securedProperties]);
+  }, [properties]);
 
   // ================= ESC CLOSE =================
   useEffect(() => {
@@ -129,16 +137,16 @@ export default function SecuredProperties() {
   return (
     <>
       {/* ================= SECTION ================= */}
-      <section ref={sectionRef} className="relative py-20 overflow-hidden">
+      <section className="relative py-20 overflow-hidden">
         {/* ✅ FULL WIDTH GLOW */}
         <div className="absolute inset-0 bg-gradient-to-t  via-black/20 to-transparent" />
 
         <div className="relative px-6 md:px-10 lg:px-20">
           {/* HEADER */}
           <div className="text-center mb-10">
-            <h1 className="text-2xl md:text-3xl font-medium text-white tracking-[-0.01em]">
+            <Heading className="text-2xl md:text-3xl font-medium text-white tracking-[-0.01em]">
               Secured Properties
-            </h1>
+            </Heading>
 
             <p className=" text-gray-400 mt-3 text-[11px] tracking-[0.2em] uppercase">
               Successfully secured for our valued clients
@@ -150,26 +158,26 @@ export default function SecuredProperties() {
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing pl-6 pr-6 md:pl-10 md:pr-10"
           >
-            {/* Skeletons match the card dimensions exactly, so the section
-                keeps its height and nothing shifts when data arrives. */}
-            {loading &&
-              [0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className="min-w-[320px] md:min-w-[340px] h-[300px] md:h-[320px] rounded-2xl flex-shrink-0 border border-[var(--card-border)] bg-white/5 animate-pulse"
-                />
-              ))}
-
-            {securedProperties.map((property) => (
+            {securedProperties.map((property, i) => (
               <div
                 key={property._id}
                 className="relative min-w-[320px] md:min-w-[340px] h-[300px] md:h-[320px] rounded-2xl overflow-hidden group flex-shrink-0"
               >
-                {/* IMAGE */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition duration-700"
-                  style={{ backgroundImage: `url(${property.coverImage})` }}
-                />
+                {/* IMAGE: the originals are multi-MB PNGs, so next/image
+                    serves a resized WebP for the card's fixed size, and only
+                    loads it when the card nears the viewport. */}
+                <div className="absolute inset-0 group-hover:scale-105 transition duration-700">
+                  {property.coverImage && (
+                    <Image
+                      src={property.coverImage}
+                      alt=""
+                      fill
+                      sizes="(min-width: 768px) 340px, 320px"
+                      loading={i < eagerImages ? "eager" : "lazy"}
+                      className="object-cover"
+                    />
+                  )}
+                </div>
 
                 {/* OVERLAY */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -182,9 +190,9 @@ export default function SecuredProperties() {
 
                 {/* CONTENT */}
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className=" text-base font-medium tracking-tight">
+                  <CardHeading className=" text-base font-medium tracking-tight">
                     {property.title}
-                  </h3>
+                  </CardHeading>
 
                   <button
                     onClick={() => {
@@ -212,21 +220,26 @@ export default function SecuredProperties() {
             className="bg-[var(--card-bg)] border border-[var(--card-border)] max-w-4xl w-full rounded-2xl overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* CLOSE */}
+            {/* CLOSE: z-10 keeps it above the gallery image (next/image fill is
+                positioned, so it would otherwise paint over the button). */}
             <button
               onClick={() => setSelectedProperty(null)}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-xl backdrop-blur-md transition"
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-xl backdrop-blur-md transition"
             >
               ✕
             </button>
 
             {/* IMAGE */}
             <div className="relative h-[320px] md:h-[360px]">
-              <img
-                src={selectedProperty.galleryImages[currentImage]}
-                className="w-full h-full object-cover"
-                alt="property"
-              />
+              {selectedProperty.galleryImages[currentImage] && (
+                <Image
+                  src={selectedProperty.galleryImages[currentImage]}
+                  alt={selectedProperty.title}
+                  fill
+                  sizes="(min-width: 896px) 896px, 100vw"
+                  className="object-cover"
+                />
+              )}
 
               {selectedProperty.galleryImages.length > 1 && (
                 <>

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { CONSULTATION_URL, FREE_WEBINAR_URL } from "@/lib/links";
-import DiscoverVideo from "@/components/sections/DiscoverVideo";
+import DiscoverVideo, {
+  type DiscoverVideoData,
+} from "@/components/sections/DiscoverVideo";
 
 interface ImageItem {
   _id: string;
@@ -20,7 +22,12 @@ interface HeroData {
   images?: ImageItem[];
 }
 
-export default function HeroSection() {
+// discoverVideo comes from the homepage's server fetch (lib/publicContent).
+export default function HeroSection({
+  discoverVideo,
+}: {
+  discoverVideo: DiscoverVideoData | null;
+}) {
   const [hero, setHero] = useState<HeroData | null>(null);
   const [current, setCurrent] = useState(0);
   const [mediaReady, setMediaReady] = useState(false);
@@ -58,7 +65,9 @@ export default function HeroSection() {
     }
   }, [hero]);
 
-  const hasImages = hero?.type === "image" && hero.images?.length;
+  // Boolean, not the count: "{0 && …}" would render a stray "0" when the hero
+  // is set to images but has none (the API's default).
+  const hasImages = hero?.type === "image" && !!hero.images?.length;
   const hasVideo = hero?.type === "video" && hero.video?.url;
 
   return (
@@ -114,7 +123,7 @@ export default function HeroSection() {
 
             {/* Heading */}
             <h1 className="text-3xl md:text-5xl xl:text-6xl font-medium leading-[1.1] tracking-[-0.015em] text-gold-gradient">
-              Buy Investment Property in Australia with the Right Strategy
+              Investment Property Buyer’s Agent, Australia-Wide
             </h1>
 
             {/* Subtitle */}
@@ -128,7 +137,7 @@ export default function HeroSection() {
             data-hero-video
             className="w-full max-w-2xl mx-auto mt-10 mb-4 lg:my-0 lg:max-w-none lg:col-start-2 lg:row-[1/-1] lg:self-center empty:hidden"
           >
-            <DiscoverVideo />
+            <DiscoverVideo video={discoverVideo} />
           </div>
 
           {/* Description */}
