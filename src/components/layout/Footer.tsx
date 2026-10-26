@@ -79,6 +79,8 @@ export default function Footer() {
         <li><Link href="/properties" className="hover:text-[var(--primary-gold)] transition-colors">Properties</Link></li>
         <li><Link href="/blog" className="hover:text-[var(--primary-gold)] transition-colors">Blog</Link></li>
         <li><Link href="/contact" className="hover:text-[var(--primary-gold)] transition-colors">Contact</Link></li>
+        <li><Link href="/investment-property-buyers-agent" className="hover:text-[var(--primary-gold)] transition-colors">Investment Property Buyers Agent</Link></li>
+        <li><Link href="/strategy-session" className="hover:text-[var(--primary-gold)] transition-colors">Strategy Session</Link></li>
       </ul>
     </div>
 
