@@ -58,7 +58,8 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": "https://www.vrsrealinvest.com.au/#organization",
-      "name": "VRS RealInvest",
+      "name": "VRS Realinvest",
+      "legalName": "VRS Realinvest Pty Ltd",
       "url": "https://www.vrsrealinvest.com.au",
       "logo": "https://www.vrsrealinvest.com.au/logo.png",
       "contactPoint": {
@@ -73,7 +74,7 @@ const jsonLd = {
     {
       "@type": "RealEstateAgent",
       "@id": "https://www.vrsrealinvest.com.au/#realestateagent",
-      "name": "VRS RealInvest",
+      "name": "VRS Realinvest",
       "url": "https://www.vrsrealinvest.com.au",
       "logo": "https://www.vrsrealinvest.com.au/logo.png",
       "telephone": "+61-412-864-050",
@@ -92,12 +93,12 @@ const jsonLd = {
     {
       "@type": "LocalBusiness",
       "@id": "https://www.vrsrealinvest.com.au/#localbusiness",
-      "name": "VRS RealInvest",
+      "name": "VRS Realinvest",
       "url": "https://www.vrsrealinvest.com.au",
       "logo": "https://www.vrsrealinvest.com.au/logo.png",
       "telephone": "+61-412-864-050",
       "email": "sudhesh@vrsrealinvest.com.au",
-      "description": "VRS RealInvest is an Australian buyer's agency and real estate coaching business helping busy professionals purchase the right investment property with clarity and confidence.",
+      "description": "VRS Realinvest is an Australian buyer's agency and real estate coaching business helping busy professionals purchase the right investment property with clarity and confidence.",
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "AU",

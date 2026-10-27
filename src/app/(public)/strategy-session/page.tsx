@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import StrategySessionForm from "@/components/sections/StrategySessionForm";
+import StrategySessionForm, {
+  BookTimeNow,
+} from "@/components/sections/StrategySessionForm";
 
 // Copy: Page Copy v2 §3. The items marked [Confirm – Sudhesh] there (session
 // length, who runs it, session format, the Google rating and buyer-only
@@ -23,9 +25,6 @@ export const metadata: Metadata = {
     locale: "en_AU",
     type: "website",
   },
-  // Unlinked and kept out of search (and out of sitemap.ts) until the whole
-  // booking flow, Calendly included, has been tested end to end.
-  robots: { index: false, follow: false },
 };
 
 const COVERED = [
@@ -91,12 +90,7 @@ export default function StrategySessionPage() {
           {/* Beside the intro (v2): a shortcut for visitors who are ready. */}
           <div className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)]/80 p-6 text-center backdrop-blur-sm">
             <p className="text-sm tracking-wide text-gray-300">Ready to book?</p>
-            <a
-              href="#book"
-              className="mt-4 inline-block rounded-lg bg-[var(--primary-gold)] px-7 py-3 text-[11px] font-medium uppercase tracking-[0.18em] text-[#221F1F] transition hover:opacity-90"
-            >
-              Book a time now
-            </a>
+            <BookTimeNow className="mt-4 inline-block rounded-lg bg-[var(--primary-gold)] px-7 py-3 text-[11px] font-medium uppercase tracking-[0.18em] text-[#221F1F] transition hover:opacity-90" />
           </div>
         </div>
       </section>
@@ -142,7 +136,8 @@ export default function StrategySessionPage() {
           </section>
 
           {/* ================= BOOKING STEP ================= */}
-          {/* scroll-mt clears the fixed navbar when "Book a time now" jumps here. */}
+          {/* Every booking button on the site links here (lib/links
+              BOOKING_URL). scroll-mt clears the fixed navbar on the jump. */}
           <section
             id="book"
             className="scroll-mt-24 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)]/80 p-6 backdrop-blur-sm md:p-10"

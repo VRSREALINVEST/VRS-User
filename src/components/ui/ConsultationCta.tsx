@@ -1,9 +1,9 @@
+import Link from "next/link";
 import { CalendarCheck } from "lucide-react";
-import { CONSULTATION_URL } from "@/lib/links";
+import { BOOKING_URL } from "@/lib/links";
 import ConsultationCtaShell from "./ConsultationCtaShell";
 
-// Floating consultation CTA, rendered by FloatingIcons above the WhatsApp
-// button.
+// Floating booking CTA, rendered by FloatingIcons above the WhatsApp button.
 //
 // The link is a server component (no client JS). ConsultationCtaShell is the
 // only client code: the close (×) button and its fade-out. The entrance and
@@ -11,11 +11,8 @@ import ConsultationCtaShell from "./ConsultationCtaShell";
 export default function ConsultationCta() {
   return (
     <ConsultationCtaShell>
-      <a
-        href={CONSULTATION_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Book a Consultation with VRS RealInvest (opens in a new tab)"
+      <Link
+        href={BOOKING_URL}
         className="relative flex items-center gap-2.5 overflow-hidden rounded-full
         bg-[var(--primary-gold)] py-2 pl-2 pr-5 text-[#221F1F]
         shadow-[0_12px_30px_rgba(0,0,0,0.55)]
@@ -29,10 +26,14 @@ export default function ConsultationCta() {
           <CalendarCheck size={18} aria-hidden="true" />
         </span>
 
+        {/* The site-wide label, shortened on phones where the pill would
+            crowd the screen (allowed by the client's 26 Oct review). */}
         <span className="relative whitespace-nowrap text-[13px] font-semibold leading-tight tracking-wide">
-          Book a Consultation
+          <span className="sm:hidden">Book</span>
+          <span className="hidden sm:inline">Schedule</span> a One-on-One
+          Session
         </span>
-      </a>
+      </Link>
     </ConsultationCtaShell>
   );
 }

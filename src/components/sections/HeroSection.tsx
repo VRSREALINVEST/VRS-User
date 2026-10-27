@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ChevronDown } from "lucide-react";
-import { CONSULTATION_URL, FREE_WEBINAR_URL } from "@/lib/links";
+import { BOOKING_URL } from "@/lib/links";
 import DiscoverVideo, {
   type DiscoverVideoData,
 } from "@/components/sections/DiscoverVideo";
@@ -125,11 +126,6 @@ export default function HeroSection({
             <h1 className="text-3xl md:text-5xl xl:text-6xl font-medium leading-[1.1] tracking-[-0.015em] text-gold-gradient">
               Investment Property Buyer’s Agent, Australia-Wide
             </h1>
-
-            {/* Subtitle */}
-            <p className="mt-8  text-[#E7C89C] text-xs md:text-sm font-medium tracking-[0.25em] uppercase text-balance">
-              Create real freedom through smart property investing
-            </p>
           </div>
 
           {/* Video — after the subtitle on mobile, right column from lg */}
@@ -140,39 +136,35 @@ export default function HeroSection({
             <DiscoverVideo video={discoverVideo} />
           </div>
 
-          {/* Description */}
+          {/* Description: the Page Copy v2 §1 hero, without the client range
+              sentence, which waits on Sudhesh. */}
           <p className="mt-6  text-gray-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed tracking-wide lg:col-start-1 lg:row-start-3">
-            We help busy professionals buy high-growth investment properties in
-            Australia with strategy, clarity, and confidence
+            VRS Realinvest helps busy professionals and families research and
+            purchase investment properties across Australia. We combine
+            education, property research and buyer representation to help you
+            make informed decisions and work towards long-term wealth. Our
+            mission is Create Real Freedom™.
           </p>
 
-          {/* CTA */}
-          <div className="mt-14 flex gap-6 flex-wrap justify-center lg:col-start-1 lg:row-start-4">
-            <button
-              onClick={() =>
-                window.open(FREE_WEBINAR_URL, "_blank", "noopener,noreferrer")
-              }
-              className="px-9 py-3 text-[11px] font-medium tracking-[0.22em] uppercase rounded-md border border-[#E7C89C] text-[#E7C89C] 
-  hover:bg-[#E7C89C] hover:text-[#221F1F] 
-  transition-all duration-300 hover:scale-[1.03]"
-            >
-              Free Webinar
-            </button>
-
-            {/* The anchor carries the button styling directly. <a><button> is
-                invalid interactive nesting, which the HTML parser re-parents,
-                so the hydrated DOM never matched the server HTML. inline-block
-                matches the other CTA anchors in the app. */}
-            <a
-              href={CONSULTATION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-9 py-3 text-[11px]  font-medium tracking-[0.22em] uppercase rounded-md border border-[#E7C89C] text-[#E7C89C]
+          {/* CTA: v2 gives the hero one button; the homepage's one webinar
+              button sits in "How we help you buy". Under it, the confirmed
+              part of the v2 proof line (rating and buyer-only wait on Sudhesh). */}
+          <div className="mt-14 lg:col-start-1 lg:row-start-4">
+            {/* The link carries the button styling directly. inline-block
+                matches the other CTA links in the app; tighter on phones so
+                the label stays on one line. */}
+            <Link
+              href={BOOKING_URL}
+              className="inline-block px-6 sm:px-9 py-3 text-[11px]  font-medium tracking-[0.16em] sm:tracking-[0.22em] uppercase rounded-md border border-[#E7C89C] text-[#E7C89C]
               hover:bg-[#E7C89C] hover:text-[#221F1F]
               transition-all duration-300 hover:scale-[1.03]"
             >
-              Consultation
-            </a>
+              Schedule a One-on-One Session
+            </Link>
+
+            <p className="mt-5 text-[10px] uppercase tracking-[0.2em] text-gray-400">
+              Licence no. 20496430
+            </p>
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 
 // Client half of ConsultationCta: the close (×) button and the fade-out. The
@@ -17,6 +18,11 @@ export default function ConsultationCtaShell({
   children: React.ReactNode;
 }) {
   const [closed, setClosed] = useState(false);
+  const pathname = usePathname();
+
+  // Not on the booking page itself: it would only link to the form it covers
+  // (and the Calendly scheduler after it) on phones.
+  if (pathname === "/strategy-session") return null;
 
   return (
     // Closing fades out, then display:none (allow-discrete) takes it out of

@@ -2,6 +2,7 @@ import {
   Facebook,
   Instagram,
   Linkedin,
+  Youtube,
   Phone,
   Mail,
   MapPin,
@@ -9,6 +10,12 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/app/logo/4.png";
+import {
+  FACEBOOK_URL,
+  INSTAGRAM_URL,
+  LINKEDIN_URL,
+  YOUTUBE_URL,
+} from "@/lib/links";
 
 export default function Footer() {
   // Keeps footer content clear of the fixed WhatsApp + consultation stack
@@ -16,11 +23,12 @@ export default function Footer() {
   // - Below lg: pb-40 lifts everything above the stack (~152px tall); the
   //   safe-area inset is added because the stack's offset includes it.
   // - lg+: no extra height; instead the content stays out of the stack's
-  //   column, 264px from the right edge (24 offset + 216 wide + 24). With the
-  //   max-w-6xl (1152px) container centred, that needs 816px - 50vw of extra
-  //   right padding: 240px max, 0 from 1632px wide.
+  //   column, 347px from the right edge (24 offset + 299 wide + 24; the pill
+  //   reads "Schedule a One-on-One Session" there). With the max-w-6xl
+  //   (1152px) container centred, that needs 899px - 50vw of extra right
+  //   padding: 323px max, 0 from 1798px wide.
   return (
-   <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-[calc(10rem+env(safe-area-inset-bottom))] lg:pb-4 overflow-hidden font-body lg:[--cta-gutter:clamp(0rem,51rem_-_50vw,15rem)]">
+   <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-[calc(10rem+env(safe-area-inset-bottom))] lg:pb-4 overflow-hidden font-body lg:[--cta-gutter:clamp(0rem,56.1875rem_-_50vw,20.1875rem)]">
   {/* TOP LINE */}
   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)]/50 to-transparent"></div>
 
@@ -52,14 +60,17 @@ export default function Footer() {
 
       <div className="flex gap-2 pt-1">
         {[
-          { Icon: Facebook, label: "Facebook" },
-          { Icon: Instagram, label: "Instagram" },
-          { Icon: Linkedin, label: "LinkedIn" },
-        ].map(({ Icon, label }) => (
+          { Icon: Facebook, href: FACEBOOK_URL, label: "VRS Realinvest on Facebook" },
+          { Icon: Instagram, href: INSTAGRAM_URL, label: "VRS Realinvest on Instagram" },
+          { Icon: Linkedin, href: LINKEDIN_URL, label: "Sudhesh K Valappil on LinkedIn" },
+          { Icon: Youtube, href: YOUTUBE_URL, label: "VRS Realinvest on YouTube" },
+        ].map(({ Icon, href, label }) => (
           <a
             key={label}
-            href="#"
-            aria-label={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${label} (opens in a new tab)`}
             className="w-6 h-6 bg-white/5 border border-[var(--card-border)] rounded-full flex items-center justify-center hover:bg-[var(--primary-gold)] hover:text-[#221F1F] transition"
           >
             <Icon size={11} />

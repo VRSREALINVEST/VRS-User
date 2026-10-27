@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { BOOKING_URL, CALENDLY_URL } from "@/lib/links";
 
 /**
  * Articles written before the rich text editor existed are stored as plain
@@ -60,15 +61,21 @@ export const sanitizeBlogHtml = (content: string): string =>
     transformTags: {
       h1: "h2",
       // Every link leaves with safe rel attributes, whatever was stored.
-      a: (tagName, attribs) => ({
-        tagName,
-        attribs: {
-          ...attribs,
-          ...(attribs.target === "_blank"
-            ? { rel: "noopener noreferrer" }
-            : {}),
-        },
-      }),
+      // Booking links to the Calendly event open the site's booking form in
+      // the same tab instead, like every booking button (client review,
+      // 26 Oct); posts stored before that still link to Calendly.
+      a: (tagName, attribs): sanitizeHtml.Tag =>
+        attribs.href?.startsWith(CALENDLY_URL)
+          ? { tagName, attribs: { href: BOOKING_URL } }
+          : {
+              tagName,
+              attribs: {
+                ...attribs,
+                ...(attribs.target === "_blank"
+                  ? { rel: "noopener noreferrer" }
+                  : {}),
+              },
+            },
       img: (tagName, attribs) => ({
         tagName,
         attribs: { ...attribs, loading: "lazy", decoding: "async" },

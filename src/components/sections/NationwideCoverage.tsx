@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 
+// Marker positions. The state names aren't shown: Page Copy v2 §1 names no
+// states here until Sudhesh confirms which team members work in which states.
 const states = [
   { name: "Western Australia", short: "WA", left: "18%", top: "60%" },
   { name: "Northern Territory", short: "NT", left: "45%", top: "28%" },
@@ -21,11 +23,13 @@ export default function NationwideCoverage() {
           <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mx-auto mb-5 opacity-80" />
 
           <h2 className="text-lg md:text-2xl font-medium text-white tracking-[-0.01em]">
-            Nationwide Coverage
+            Buying across Australia
           </h2>
 
-          <p className="text-gray-400 mt-3 text-[10px] md:text-xs tracking-[0.2em] uppercase">
-            Our presence across major Australian cities
+          <p className="text-gray-300 mt-4 max-w-2xl mx-auto text-sm md:text-base leading-relaxed tracking-wide">
+            Our business is based in Jordan Springs, near Penrith in Sydney’s
+            west, and we buy wherever your brief and our research point, not
+            where we happen to live.
           </p>
         </div>
 
@@ -56,15 +60,6 @@ export default function NationwideCoverage() {
 
                   {/* DOT */}
                   <span className="relative h-3 w-3 rounded-full bg-[var(--primary-gold)] shadow-[0_0_14px_rgba(231,200,156,0.9)] border border-white/40" />
-
-                  {/* LABEL */}
-                  <div className="mt-2 px-3 py-1 text-[9px] md:text-[10px] tracking-[0.15em] uppercase bg-[#221F1F]/90 text-white rounded-full border border-[var(--card-border)] backdrop-blur-md whitespace-nowrap">
-                    <span className="md:hidden text-[var(--primary-gold)]">
-                      {state.short}
-                    </span>
-
-                    <span className="hidden md:inline">{state.name}</span>
-                  </div>
                 </div>
               </div>
             ))}

@@ -68,13 +68,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Only the two listings have a reliable date (from their data). The other
   // pages have no record of when their content last changed, so they carry
-  // no lastModified. /strategy-session stays out: it is noindex and unlinked.
+  // no lastModified.
   const staticPages: MetadataRoute.Sitemap = [
     {
       // Trailing slash to match the homepage canonical exactly.
       url: `${BASE_URL}/`,
       changeFrequency: "monthly",
       priority: 1.0,
+    },
+    {
+      // The main service page.
+      url: `${BASE_URL}/investment-property-buyers-agent`,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      // The booking page every booking button links to.
+      url: `${BASE_URL}/strategy-session`,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       // Properties render on a single listing page (no per-property routes),

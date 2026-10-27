@@ -1,5 +1,6 @@
+import Link from "next/link";
 import SecuredProperties from "@/components/sections/SecuredProperties";
-import { CONSULTATION_URL } from "@/lib/links";
+import { BOOKING_URL } from "@/lib/links";
 import { getSecuredProperties } from "@/lib/publicContent";
 
 export default async function PropertiesPage() {
@@ -31,14 +32,12 @@ export default async function PropertiesPage() {
               opportunities that match your goals.
             </p>
 
-            <a
-              href={CONSULTATION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={BOOKING_URL}
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-6 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition"
             >
-              Get Consultation
-            </a>
+              Schedule a One-on-One Session
+            </Link>
           </div>
         </div>
       </section>

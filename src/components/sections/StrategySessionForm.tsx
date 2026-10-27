@@ -1,12 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import { CheckCircle } from "lucide-react";
+import { CALENDLY_URL } from "@/lib/links";
 import { loadUtm, utmFromQuery } from "@/lib/utm";
 
 // The booking-step form on /strategy-session (Page Copy v2 §3). It saves the
-// enquiry through POST /api/enquiries with source "strategy-session".
+// enquiry through POST /api/enquiries with source "strategy-session", then
+// opens Calendly's scheduler on the same page, prefilled.
+
+const CALENDLY_WIDGET = "https://assets.calendly.com/assets/external/widget.js";
 
 // Must match STATES, STRATEGY_GOALS and TIMINGS in
 // backend/src/models/Enquiry.js byte for byte: the API compares exact strings,
@@ -100,6 +105,27 @@ const readUtm = () => {
   return Object.keys(utm).length ? utm : undefined;
 };
 
+// The visitor's details for Calendly's form, in the embed's prefill shape.
+// Calendly's phone question reads the number as international (tested 27 Oct:
+// "0412…" showed as "+0412…", country unknown), so it goes in as +61… with no
+// spaces; a number whose country can't be told is left for the visitor.
+const calendlyPrefill = (form: FormState) => {
+  const digits = form.phone.replace(/\D/g, "");
+  const a3 = form.phone.trim().startsWith("+")
+    ? `+${digits}`
+    : form.state !== "Overseas" && digits.startsWith("0")
+      ? `+61${digits.slice(1)}`
+      : "";
+  return {
+    name: `${form.firstName.trim()} ${form.lastName.trim()}`,
+    email: form.email.trim(),
+    // Calendly numbers its invitee questions a1, a2… in order: "Your Contact
+    // number" is the event's third (checked 27 Oct). Reorder the questions in
+    // Calendly and this must follow.
+    customAnswers: a3 ? { a3 } : undefined,
+  };
+};
+
 // `muted` renders an unset <select> like a placeholder.
 const inputClass = (hasError?: boolean, muted?: boolean) =>
   `w-full rounded-lg bg-black/30 px-4 py-3 text-sm outline-none transition placeholder:text-gray-600 border ${
@@ -162,6 +188,61 @@ export default function StrategySessionForm() {
   // could still see it false; the ref blocks a duplicate enquiry outright.
   const inFlight = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const calendlyRef = useRef<HTMLDivElement>(null);
+  const [calendlyFailed, setCalendlyFailed] = useState(false);
+
+  // Messages from the scheduler, trusted only from calendly.com.
+  useEffect(() => {
+    if (!submitted) return;
+    let prefilled = false;
+    let booked = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin !== "https://calendly.com") return;
+      const event = e.data?.event;
+      // widget.js posts the prefill while the scheduler loads, which
+      // Calendly's app can miss (it did in testing, 27 Oct). So the same
+      // message goes again when the visitor clicks Next to the details form:
+      // at once, after 250 ms and after 1 s, because the form's phone field
+      // resets itself as it starts (one send kept the phone 1 time in 3,
+      // three sends 3 in 3).
+      if (event === "calendly.date_and_time_selected" && !prefilled) {
+        prefilled = true;
+        const { customAnswers, ...details } = calendlyPrefill(form);
+        const send = () =>
+          calendlyRef.current
+            ?.querySelector("iframe")
+            ?.contentWindow?.postMessage(
+              { event: "calendly.prefill", payload: { ...details, ...customAnswers } },
+              "https://calendly.com",
+            );
+        for (const ms of [0, 250, 1000]) timers.push(setTimeout(send, ms));
+      }
+      // booking_completed, the GA4 key event, comes only from Calendly's own
+      // confirmation, once, and bare like the other events.
+      if (event === "calendly.event_scheduled" && !booked) {
+        booked = true;
+        window.gtag?.("event", "booking_completed");
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => {
+      window.removeEventListener("message", onMessage);
+      timers.forEach(clearTimeout);
+    };
+  }, [submitted, form]);
+
+  // Prefilled through the embed, never through a URL.
+  const openCalendly = () => {
+    const parentElement = calendlyRef.current;
+    // onReady runs again on a remount; keep one scheduler.
+    if (!parentElement || parentElement.childElementCount) return;
+    window.Calendly?.initInlineWidget({
+      url: CALENDLY_URL,
+      parentElement,
+      prefill: calendlyPrefill(form),
+    });
+  };
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -228,6 +309,9 @@ export default function StrategySessionForm() {
         // Fired only for a saved enquiry, and bare: no parameters, so nothing
         // the visitor typed can reach GA4.
         window.gtag?.("event", "strategy_form_submit");
+        // "Choose a time" has now opened the scheduler: a booking click, not
+        // a booking.
+        window.gtag?.("event", "booking_click");
         return;
       }
 
@@ -278,11 +362,35 @@ export default function StrategySessionForm() {
           touch with you shortly.
         </p>
 
-        {/* Booking step. When the client confirms the Calendly event to embed
-            and the order of its questions, Calendly's inline widget goes here,
-            prefilled from `form` through the embed's prefill option (never the
-            URL), and booking_completed fires on its calendly.event_scheduled
-            message. Until then the team follows up from the enquiry inbox. */}
+        {/* Booking step: Calendly's scheduler on this page (v2 "Choose a
+            time"). The enquiry is already saved, so a visitor who doesn't
+            book is still followed up from the enquiry inbox. */}
+        <p className="mt-10 text-[11px] uppercase tracking-[0.22em] text-[var(--primary-gold)]">
+          Choose a time
+        </p>
+        {calendlyFailed ? (
+          <p className="mt-4 text-sm text-gray-400">
+            The calendar didn’t load.{" "}
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              Open it in a new tab
+              <NewTab />
+            </a>
+          </p>
+        ) : (
+          // -mx-6 hands the card's padding to the scheduler on phones, where
+          // Calendly needs the width.
+          <div ref={calendlyRef} className="-mx-6 mt-4 h-[700px] md:mx-0" />
+        )}
+        <Script
+          src={CALENDLY_WIDGET}
+          onReady={openCalendly}
+          onError={() => setCalendlyFailed(true)}
+        />
       </div>
     );
   }
@@ -481,5 +589,19 @@ export default function StrategySessionForm() {
         {submitting ? "Sending…" : "Choose a time"}
       </button>
     </form>
+  );
+}
+
+// "Book a time now" beside the page intro: an in-page jump to the form, and a
+// booking click in GA4 (Page Copy v2 tracking).
+export function BookTimeNow({ className }: { className: string }) {
+  return (
+    <a
+      href="#book"
+      onClick={() => window.gtag?.("event", "booking_click")}
+      className={className}
+    >
+      Book a time now
+    </a>
   );
 }

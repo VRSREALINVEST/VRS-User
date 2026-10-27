@@ -3,9 +3,9 @@ import { WHATSAPP_URL } from "@/lib/links";
 import ConsultationCta from "./ConsultationCta";
 
 // Site-wide floating actions, mounted once in app/(public)/layout.tsx: the
-// consultation CTA on top, the WhatsApp button below it, in one fixed
+// booking CTA on top, the WhatsApp button below it, in one fixed
 // bottom-right stack. Footer.tsx clears the stack's footprint (about 152px
-// tall, 216px wide), so keep it in sync with the sizes here.
+// tall, 299px wide), so keep it in sync with the sizes here.
 //
 // z-40 keeps the stack over page content but under the navbar/mobile menu and
 // page modals (z-50). The container never takes clicks itself; each child opts

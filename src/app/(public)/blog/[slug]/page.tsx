@@ -230,12 +230,14 @@ export default async function BlogDetail({
           // The Organization node in the root layout's JSON-LD.
           "@type": "Organization",
           "@id": `${SITE_URL}/#organization`,
-          name: "VRS RealInvest",
+          name: "VRS Realinvest",
           url: SITE_URL,
         },
+    // The same Organization node, so the page doesn't describe a second one.
     publisher: {
       "@type": "Organization",
-      name: "VRS Real Invest",
+      "@id": `${SITE_URL}/#organization`,
+      name: "VRS Realinvest",
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/logo.png`,

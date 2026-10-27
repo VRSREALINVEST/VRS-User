@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { CheckCircle, Shield, Target, TrendingUp } from "lucide-react";
-import { CONSULTATION_URL } from "@/lib/links";
+import { BOOKING_URL } from "@/lib/links";
 
 export default function AboutSection() {
   return (
@@ -24,33 +25,33 @@ export default function AboutSection() {
         <div className="max-w-lg mx-auto md:mx-0 text-center md:text-left flex flex-col justify-center">
           <div className="w-20 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mb-6 opacity-80 mx-auto md:mx-0" />
 
-          {/* Page Copy v2 §4 H1. The opening paragraph that replaces the text
-              below waits on two claims Sudhesh hasn't confirmed yet. */}
+          {/* Page Copy v2 §4: H1 and opening. Left out until Sudhesh confirms
+              them: the $350K–$700K range and buyer-only representation. */}
           <h1 className=" text-4xl md:text-5xl font-medium leading-[1.1] tracking-[-0.015em]">
             About VRS Realinvest
           </h1>
 
           <p className=" text-gray-300 text-base md:text-lg leading-relaxed tracking-wide mt-6">
-            At{" "}
             <span className="text-[var(--primary-gold)] font-medium">
-              VRS RealInvest
-            </span>
-            , we help busy professionals build wealth through strategic
-            Australian real estate investing.
+              VRS Realinvest
+            </span>{" "}
+            is a buyer’s agency and property education business. We help busy
+            professionals and families research and buy investment properties
+            across Australia.
           </p>
 
           <p className=" text-gray-300 text-base md:text-lg leading-relaxed tracking-wide mt-4">
-            We’re a Buyer’s Agent and Real Estate Coaching team focused on one
-            thing: helping you purchase the right investment property with
-            clarity, confidence, and a low-risk approach — without wasting
-            months researching or making costly mistakes.
+            Founded by{" "}
+            <span className="text-white font-medium">Sudhesh K Valappil</span>{" "}
+            and based in Jordan Springs, NSW, near Penrith, we lead with
+            education and evidence-based research. Our mission is Create Real
+            Freedom™: helping people work towards long-term wealth and greater
+            choice through informed property decisions.
           </p>
 
           <p className=" text-gray-400 leading-relaxed tracking-wide mt-4">
-            Led by{" "}
-            <span className="text-white font-medium">Sudhesh K Valappil</span>,
-            we represent you — the buyer — and guide you from strategy to
-            settlement.
+            We don’t promise growth or rental income. We show you the evidence
+            behind each decision.
           </p>
         </div>
       </div>
@@ -218,14 +219,12 @@ export default function AboutSection() {
               opportunities today.
             </p>
 
-            <a
-              href={CONSULTATION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={BOOKING_URL}
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-[11px]  font-medium tracking-[0.18em] uppercase hover:opacity-90 hover:scale-[1.03] active:scale-[0.98] transition"
             >
-              Get Free Consultation
-            </a>
+              Schedule a One-on-One Session
+            </Link>
           </div>
         </div>
       </section>

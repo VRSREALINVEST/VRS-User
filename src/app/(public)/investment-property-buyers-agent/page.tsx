@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CONSULTATION_URL, WHATSAPP_URL } from "@/lib/links";
+import { BOOKING_URL, WHATSAPP_URL } from "@/lib/links";
 
-// Copy: Page Copy v2 §2. Left off until Sudhesh confirms them: buyer-only
-// representation, the $350K–$700K range (intro and one FAQ), off-market
-// sourcing, auction bidding and who pays third-party providers. The 10 factors
-// guide link, the property cards and the testimonials wait for a live guide
-// page and client-approved data.
+// Copy: Page Copy v2 §2, plus the intro sentence from the client's 26 Oct
+// review. Left off until Sudhesh confirms them: buyer-only representation,
+// the $350K–$700K range (intro and one FAQ), off-market sourcing, auction
+// bidding and who pays third-party providers. The 10 factors guide link, the
+// property cards and the testimonials wait for a live guide page and
+// client-approved data.
 const TITLE = "Investment Property Buyer’s Agent Australia | VRS Realinvest";
 const DESCRIPTION =
   "Research-led buyer’s agent for investment property across Australia: buying brief, research, sourcing, due diligence and negotiation. Schedule a One-on-One Session.";
@@ -28,9 +29,6 @@ export const metadata: Metadata = {
     locale: "en_AU",
     type: "website",
   },
-  // Unlinked and kept out of search (and out of sitemap.ts) until the client
-  // has reviewed the page and the copy left off it is confirmed.
-  robots: { index: false, follow: false },
 };
 
 // No offers, price, priceRange or rating markup: fees stay private and the
@@ -148,19 +146,14 @@ const H3 = "text-base md:text-lg font-medium tracking-wide text-white";
 const TEXT_LINK =
   "text-[var(--primary-gold)] underline underline-offset-4 transition hover:opacity-80";
 
-// Same destination as the site's other booking buttons (CONSULTATION_URL);
-// they all move to /strategy-session#book together once that flow is tested.
 function BookingButton() {
   return (
-    <a
-      href={CONSULTATION_URL}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={BOOKING_URL}
       className="inline-block rounded-lg bg-[var(--primary-gold)] px-7 py-3 text-center text-[11px] font-medium uppercase tracking-[0.18em] text-[#221F1F] transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--primary-gold)]"
     >
       Schedule a One-on-One Session
-      <span className="sr-only"> (opens in a new tab)</span>
-    </a>
+    </Link>
   );
 }
 
@@ -223,6 +216,11 @@ export default function InvestmentPropertyBuyersAgentPage() {
             Buying an investment property takes time most busy professionals
             don’t have: researching markets, comparing properties, checking the
             numbers and negotiating with selling agents who work for the seller.
+          </p>
+          <p className={`mt-4 max-w-2xl ${BODY}`}>
+            As your investment property buyer’s agent, VRS Realinvest works for
+            you, the buyer, from your first brief to settlement, in whichever
+            Australian market best fits your goals.
           </p>
 
           <div className="mt-8">
@@ -313,18 +311,11 @@ export default function InvestmentPropertyBuyersAgentPage() {
             </div>
           </section>
 
-          {/* ================= SECURED PROPERTIES ================= */}
-          {/* The three cards (state, budget band, purchase month, why it was
-              chosen) go above the link once the client approves them and the
-              property model has those fields. */}
-          <section>
-            <h2 className={H2}>Properties we’ve secured for clients</h2>
-            <p className={`mt-5 ${BODY}`}>
-              <Link href="/properties" className={TEXT_LINK}>
-                See all secured properties
-              </Link>
-            </p>
-          </section>
+          {/* "Properties we’ve secured for clients" (H2, three cards with
+              state, budget band, purchase month and why it was chosen, then a
+              "See all secured properties" link to /properties) goes here once
+              the client approves three properties and the property model has
+              those fields. Hidden until then: a heading with no cards. */}
 
           {/* "What clients say about our buying service" goes here once there
               are three client-approved buying-service testimonials and a
