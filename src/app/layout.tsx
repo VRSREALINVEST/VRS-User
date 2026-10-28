@@ -6,6 +6,12 @@ import localFont from "next/font/local";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
+// GA4 runs only on the live site (exact host match). Anywhere else (localhost,
+// LAN IPs, previews, hosting temp domains) no gtag.js loads and window.gtag
+// stays undefined, so the site's window.gtag?.() events do nothing. The apex
+// redirects to www (next.config.ts) and is listed in case a page is served there.
+const GA_HOSTS = ["www.vrsrealinvest.com.au", "vrsrealinvest.com.au"];
+
 const playfair = localFont({
   src: "./fonts/CormorantGaramond-Variable.woff2",
   weight: "300 700",
@@ -129,21 +135,24 @@ export default function RootLayout({
         <ScrollToTop />
         {children}
 
+        {/* gtag.js is added by this script, not by a <Script src>: that one
+            also puts a <link rel="preload"> for it in the HTML, which every
+            host would download. */}
         {GA_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="ga4-init" strategy="afterInteractive">
-              {`
+          <Script id="ga4-init" strategy="afterInteractive">
+            {`
+              if (${JSON.stringify(GA_HOSTS)}.includes(location.hostname)) {
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+                window.gtag = function(){dataLayer.push(arguments);};
                 gtag('js', new Date());
                 gtag('config', '${GA_ID}');
-              `}
-            </Script>
-          </>
+                var s = document.createElement('script');
+                s.async = true;
+                s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID}';
+                document.head.appendChild(s);
+              }
+            `}
+          </Script>
         )}
       </body>
     </html>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { looksLikeHtml, sanitizeBlogHtml } from "@/lib/blogHtml";
 import { SUDHESH, TEAM, isBySudhesh } from "@/lib/byline";
+import { cloudinaryUrl } from "@/lib/cloudinary";
 
 interface Blog {
   _id: string;
@@ -299,8 +300,11 @@ export default async function BlogDetail({
       {/* IMAGE */}
       <section className="px-6 mb-16">
         <div className="max-w-5xl mx-auto">
+          {/* Up to 1024px wide on desktop and about 620px (the 350px-tall
+              crop of a 16:9 image) on phones, so it gets a larger copy than
+              the cards. Social and schema images keep the original URL. */}
           <img
-            src={blog.image}
+            src={cloudinaryUrl(blog.image, 1600)}
             alt={blog.imageAlt || blog.title}
             title={blog.imageTitle || undefined}
             fetchPriority="high"

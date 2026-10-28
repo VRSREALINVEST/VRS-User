@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import { SUDHESH, TEAM, isBySudhesh } from "@/lib/byline";
+import { cloudinaryUrl } from "@/lib/cloudinary";
 
 interface BlogPost {
   _id: string;
@@ -85,8 +86,11 @@ export default async function BlogPage() {
                   >
                     {/* IMAGE */}
                     <div className="relative overflow-hidden">
+                      {/* The 240px-tall cover box shows a 16:9 image about
+                          427px wide on phones and in the desktop grid, so
+                          800px is roughly 2x. */}
                       <img
-                        src={post.image}
+                        src={cloudinaryUrl(post.image, 800)}
                         alt={post.imageAlt || post.title}
                         title={post.imageTitle || undefined}
                         loading="lazy"
