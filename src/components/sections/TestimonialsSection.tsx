@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Star, ChevronLeft, ChevronRight, Quote, Play } from "lucide-react";
 import VideoModal from "@/components/common/VideoModal";
 import { youtubeId, youtubeThumbnail } from "@/lib/youtube";
+import { TESTIMONIAL_CATEGORY } from "@/lib/testimonialCategories";
 
 export interface TextReview {
   _id: string;
@@ -26,15 +27,19 @@ export interface VideoReview {
 // the headings without cards. Videos are click to play: each card shows the
 // video's thumbnail and a Play button, and the YouTube player loads only in the
 // modal after a click. The first heading is an h2 under the homepage's own h1;
-// /review has no other heading, so it passes headingLevel="h1" there.
+// /review has no other heading, so it passes headingLevel="h1" there. Category
+// labels are homepage-only (client request), so only the homepage passes
+// showCategories.
 export default function TestimonialsSection({
   reviews: reviewList,
   videos: videoList,
   headingLevel: Heading = "h2",
+  showCategories = false,
 }: {
   reviews: TextReview[] | null;
   videos: VideoReview[] | null;
   headingLevel?: "h1" | "h2";
+  showCategories?: boolean;
 }) {
   const reviews = reviewList ?? [];
   const videos = videoList ?? [];
@@ -101,6 +106,9 @@ export default function TestimonialsSection({
                         className="absolute top-4 right-4 text-[var(--primary-gold)] opacity-10"
                         size={40}
                       />
+                      {showCategories && (
+                        <CategoryLabel id={review._id} className="self-center mb-4" />
+                      )}
                       <div className="flex justify-center gap-1 mb-4">
                         {[...Array(review.rating || 5)].map((_, i) => (
                           <Star
@@ -211,6 +219,13 @@ export default function TestimonialsSection({
                       {/* Overlay */}
                       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
 
+                      {showCategories && (
+                        <CategoryLabel
+                          id={video._id}
+                          className="absolute top-4 left-4 z-10"
+                        />
+                      )}
+
                       {/* Name & Role */}
                       <div className="absolute bottom-5 left-5 text-white z-10">
                         <p className="font-[family-name:var(--font-heading)] text-base font-medium tracking-tight">
@@ -273,5 +288,19 @@ export default function TestimonialsSection({
         />
       )}
     </>
+  );
+}
+
+// The testimonial's category as a pill like the "Secured" badge on property
+// cards; nothing for a testimonial without one (see lib/testimonialCategories).
+function CategoryLabel({ id, className }: { id: string; className: string }) {
+  const category = TESTIMONIAL_CATEGORY[id];
+  if (!category) return null;
+  return (
+    <span
+      className={`rounded-full bg-[var(--primary-gold)] px-3 py-1 text-[11px] font-medium tracking-wide text-[#221F1F] shadow-md ${className}`}
+    >
+      {category}
+    </span>
   );
 }

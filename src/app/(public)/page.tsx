@@ -147,7 +147,7 @@ export default async function HomePage() {
       <NationwideCoverage />
       <SecuredProperties properties={properties} />
       <TeamSection members={team} />
-      <TestimonialsSection reviews={reviews} videos={videos} />
+      <TestimonialsSection reviews={reviews} videos={videos} showCategories />
 
       <section className="py-14 px-6">
         <div className="max-w-4xl mx-auto">

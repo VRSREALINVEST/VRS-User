@@ -6,16 +6,8 @@ import Script from "next/script";
 import { CheckCircle } from "lucide-react";
 import { CALENDLY_URL } from "@/lib/links";
 import { loadUtm, utmFromQuery } from "@/lib/utm";
-
-// The booking-step form on /strategy-session (Page Copy v2 §3). It saves the
-// enquiry through POST /api/enquiries with source "strategy-session", then
-// opens Calendly's scheduler on the same page, prefilled.
-
 const CALENDLY_WIDGET = "https://assets.calendly.com/assets/external/widget.js";
 
-// Must match STATES, STRATEGY_GOALS and TIMINGS in
-// backend/src/models/Enquiry.js byte for byte: the API compares exact strings,
-// and the timings use en dashes (U+2013), not hyphens.
 const STATES = ["NSW", "VIC", "QLD", "WA", "SA", "TAS", "ACT", "NT", "Overseas"];
 const GOALS = [
   "Buy my first investment property",

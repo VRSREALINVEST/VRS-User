@@ -131,8 +131,8 @@ export default function AboutSection() {
       <SectionWrapper title="Who We Are">
         <div className="text-center max-w-3xl mx-auto">
           <p className=" text-gray-300 leading-relaxed tracking-wide">
-            VRS RealInvest is an Australian buyer’s agency and real estate
-            coaching business led by Sudhesh K Valappil...
+            VRS Realinvest is an Australian buyer’s agency and property
+            education business led by Sudhesh K Valappil...
           </p>
 
           <p className=" text-gray-300 mt-4 leading-relaxed tracking-wide">

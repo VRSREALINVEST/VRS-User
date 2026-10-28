@@ -16,15 +16,19 @@ interface BlogPost {
   createdAt: string;
 }
 
+// The title already ends with the brand, so the root layout's
+// "%s | VRS Real Invest" template must not add it again.
+const TITLE = "Property Investment Blog | VRS Realinvest";
+
 export const metadata: Metadata = {
-  title: "Real Estate Blog | VRS Real Invest",
+  title: { absolute: TITLE },
   description:
     "Explore premium real estate insights, luxury investment strategies, and expert market analysis from VRS Real Invest.",
   alternates: {
     canonical: "/blog",
   },
   openGraph: {
-    title: "Real Estate Blog | VRS Real Invest",
+    title: TITLE,
     description:
       "Explore premium real estate insights, luxury investment strategies, and expert market analysis from VRS Real Invest.",
     url: "https://www.vrsrealinvest.com.au/blog",

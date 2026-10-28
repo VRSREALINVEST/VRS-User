@@ -121,7 +121,7 @@ export default function Footer() {
   {/* BOTTOM */}
   <div className="border-t border-[var(--card-border)] mt-8 pt-3 max-w-6xl mx-auto px-6 lg:pr-[calc(1.5rem+var(--cta-gutter))] flex flex-col md:flex-row justify-between items-center gap-1.5 text-[10px] tracking-wide">
     <p className="text-gray-500">
-      © {new Date().getFullYear()} VRS RealInvest
+      © {new Date().getFullYear()} VRS Realinvest
     </p>
 
     <div className="flex gap-4">
