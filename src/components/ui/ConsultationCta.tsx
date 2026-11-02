@@ -26,12 +26,12 @@ export default function ConsultationCta() {
           <CalendarCheck size={18} aria-hidden="true" />
         </span>
 
-        {/* The site-wide label, shortened on phones where the pill would
-            crowd the screen (allowed by the client's 26 Oct review). */}
-        <span className="relative whitespace-nowrap text-[13px] font-semibold leading-tight tracking-wide">
-          <span className="sm:hidden">Book</span>
-          <span className="hidden sm:inline">Schedule</span> a One-on-One
-          Session
+        {/* The full site-wide label on two lines: on one line the pill would
+            be about 370px wide, too wide for phones. Two lines still fit
+            inside the icon's height, so the pill keeps its height. */}
+        <span className="relative text-[13px] font-semibold leading-tight tracking-wide">
+          Schedule a One-on-One <br />
+          Strategy Session
         </span>
       </Link>
     </ConsultationCtaShell>

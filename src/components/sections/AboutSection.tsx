@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckCircle, Shield, Target, TrendingUp } from "lucide-react";
 import { BOOKING_URL } from "@/lib/links";
+import BookingLabel from "@/components/ui/BookingLabel";
 
 export default function AboutSection() {
   return (
@@ -223,7 +224,7 @@ export default function AboutSection() {
               href={BOOKING_URL}
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-[11px]  font-medium tracking-[0.18em] uppercase hover:opacity-90 hover:scale-[1.03] active:scale-[0.98] transition"
             >
-              Schedule a One-on-One Session
+              <BookingLabel />
             </Link>
           </div>
         </div>

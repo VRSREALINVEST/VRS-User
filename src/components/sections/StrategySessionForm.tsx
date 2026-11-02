@@ -528,7 +528,7 @@ export default function StrategySessionForm() {
             />
             <span>
               I agree to VRS Realinvest contacting me by email, phone or SMS
-              about this enquiry and my One-on-One Session.{" "}
+              about this enquiry and my One-on-One Strategy Session.{" "}
               <Link href="/privacy-policy" target="_blank" className={linkClass}>
                 Privacy policy
                 <NewTab />

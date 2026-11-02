@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SecuredProperties from "@/components/sections/SecuredProperties";
+import BookingLabel from "@/components/ui/BookingLabel";
 import { BOOKING_URL } from "@/lib/links";
 import { getSecuredProperties } from "@/lib/publicContent";
 
@@ -36,7 +37,7 @@ export default async function PropertiesPage() {
               href={BOOKING_URL}
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-6 py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition"
             >
-              Schedule a One-on-One Session
+              <BookingLabel />
             </Link>
           </div>
         </div>

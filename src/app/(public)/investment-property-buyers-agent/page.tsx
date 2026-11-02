@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import BookingLabel from "@/components/ui/BookingLabel";
 import { BOOKING_URL, WHATSAPP_URL } from "@/lib/links";
 
 // Copy: Page Copy v2 §2, plus the intro sentence from the client's 26 Oct
-// review. Left off until Sudhesh confirms them: buyer-only representation,
-// the $350K–$700K range (intro and one FAQ), off-market sourcing, auction
+// review; the session wording, step 6, the SMSF line and the FAQs follow
+// Page Copy v3 §2. Left off until Sudhesh confirms them: buyer-only
+// representation, the $350K–$700K range, off-market sourcing, auction
 // bidding and who pays third-party providers. The 10 factors guide link, the
 // property cards and the testimonials wait for a live guide page and
 // client-approved data.
 const TITLE = "Investment Property Buyer’s Agent Australia | VRS Realinvest";
 const DESCRIPTION =
-  "Research-led buyer’s agent for investment property across Australia: buying brief, research, sourcing, due diligence and negotiation. Schedule a One-on-One Session.";
+  "Research-led buyer’s agent for investment property across Australia: buying brief, research, sourcing, due diligence and negotiation. Schedule a One-on-One Strategy Session.";
 const NAME = "Investment Property Buyer’s Agent";
 const SITE_URL = "https://www.vrsrealinvest.com.au";
 const PAGE_URL = `${SITE_URL}/investment-property-buyers-agent`;
@@ -58,7 +60,7 @@ const SUITS = [
   "First-time investors who want to understand each decision, not just be handed a property",
   "Homeowners adding their first investment property",
   "Investors buying interstate, in a market they don’t know well",
-  "SMSF trustees, once their licensed adviser has confirmed an SMSF purchase suits them",
+  "SMSF trustees who have decided, on their own licensed advice, that a property purchase suits their fund",
 ];
 
 const STEPS = [
@@ -81,7 +83,7 @@ const STEPS = [
   ["Negotiation", "We negotiate price and terms on your behalf."],
   [
     "Coordination to settlement",
-    "We coordinate with your conveyancer or solicitor, building and pest inspectors, mortgage broker and property manager. They advise you in their own areas; we keep everything moving.",
+    "We coordinate with your conveyancer or solicitor, building and pest inspectors, mortgage broker and property manager. Your solicitor or conveyancer reviews the contract and advises you on it; we coordinate the process and flag matters for their attention. Each professional advises you in their own area; we keep everything moving.",
   ],
 ];
 
@@ -128,7 +130,11 @@ const FAQS = [
   ],
   [
     "Is a buyer’s agent worth it for an investment property?",
-    "It depends on your time, your experience and how well you know the market you’re buying in. A buyer’s agent can save research time, widen your options and negotiate on your behalf, but it only makes sense if those benefits matter to you. The One-on-One Session is there to help you decide.",
+    "It depends on your time, your experience and how well you know the market you’re buying in. A buyer’s agent can save research time, widen your options and negotiate on your behalf, but it only makes sense if those benefits matter to you. The One-on-One Strategy Session is there to help you decide.",
+  ],
+  [
+    "Do you work with my budget?",
+    "Tell us your budget and plans in a One-on-One Strategy Session, and we’ll be honest about whether our service is a good fit.",
   ],
   [
     "Do you only buy in Sydney?",
@@ -152,7 +158,7 @@ function BookingButton() {
       href={BOOKING_URL}
       className="inline-block rounded-lg bg-[var(--primary-gold)] px-7 py-3 text-center text-[11px] font-medium uppercase tracking-[0.18em] text-[#221F1F] transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--primary-gold)]"
     >
-      Schedule a One-on-One Session
+      <BookingLabel />
     </Link>
   );
 }
@@ -242,7 +248,7 @@ export default function InvestmentPropertyBuyersAgentPage() {
             </ul>
             <p className={`mt-5 ${BODY}`}>
               Buying your first home rather than an investment? You’re welcome
-              to book a free One-on-One Session too, and our{" "}
+              to book a One-on-One Strategy Session too, and our{" "}
               <Link href="/webinar" className={TEXT_LINK}>
                 free webinar
               </Link>{" "}
@@ -303,8 +309,8 @@ export default function InvestmentPropertyBuyersAgentPage() {
               them.
             </p>
             <p className={`mt-5 ${BODY}`}>
-              Schedule a free One-on-One Session to discuss your buying plans and
-              what our service includes, or <WhatsAppLink />.
+              Schedule a One-on-One Strategy Session to discuss your buying
+              plans and what our service includes, or <WhatsAppLink />.
             </p>
             <div className="mt-6">
               <BookingButton />
@@ -338,7 +344,7 @@ export default function InvestmentPropertyBuyersAgentPage() {
           <section className="rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)]/80 p-6 backdrop-blur-sm md:p-10">
             {/* A lead line, not a heading: v2 gives the closing block none. */}
             <p className={`${H2} font-[family-name:var(--font-heading)]`}>
-              Start with a free One-on-One Session.
+              Start with a One-on-One Strategy Session.
             </p>
             <p className={`mt-4 ${BODY}`}>
               Tell us your goals, budget and timing. We’ll explain how we’d

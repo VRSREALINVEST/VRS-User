@@ -28,8 +28,9 @@ export default function NationwideCoverage() {
 
           <p className="text-gray-300 mt-4 max-w-2xl mx-auto text-sm md:text-base leading-relaxed tracking-wide">
             Our business is based in Jordan Springs, near Penrith in Sydney’s
-            west, and we buy wherever your brief and our research point, not
-            where we happen to live.
+            west. We buy across Australia wherever your brief and our research
+            point, with the appropriate local professionals supporting each
+            purchase.
           </p>
         </div>
 

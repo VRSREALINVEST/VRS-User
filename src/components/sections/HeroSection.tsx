@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { BOOKING_URL } from "@/lib/links";
+import BookingLabel from "@/components/ui/BookingLabel";
 import DiscoverVideo, {
   type DiscoverVideoData,
 } from "@/components/sections/DiscoverVideo";
@@ -151,15 +152,15 @@ export default function HeroSection({
               part of the v2 proof line (rating and buyer-only wait on Sudhesh). */}
           <div className="mt-14 lg:col-start-1 lg:row-start-4">
             {/* The link carries the button styling directly. inline-block
-                matches the other CTA links in the app; tighter on phones so
-                the label stays on one line. */}
+                matches the other CTA links in the app; tighter on phones,
+                where the label wraps to two lines. */}
             <Link
               href={BOOKING_URL}
               className="inline-block px-6 sm:px-9 py-3 text-[11px]  font-medium tracking-[0.16em] sm:tracking-[0.22em] uppercase rounded-md border border-[#E7C89C] text-[#E7C89C]
               hover:bg-[#E7C89C] hover:text-[#221F1F]
               transition-all duration-300 hover:scale-[1.03]"
             >
-              Schedule a One-on-One Session
+              <BookingLabel />
             </Link>
 
             <p className="mt-5 text-[10px] uppercase tracking-[0.2em] text-gray-400">

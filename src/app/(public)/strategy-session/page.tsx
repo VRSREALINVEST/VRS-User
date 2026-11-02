@@ -3,12 +3,13 @@ import StrategySessionForm, {
   BookTimeNow,
 } from "@/components/sections/StrategySessionForm";
 
-// Copy: Page Copy v2 §3. The items marked [Confirm – Sudhesh] there (session
-// length, who runs it, session format, the Google rating and buyer-only
-// representation) stay off the page until he confirms them.
-const TITLE = "Free One-on-One Property Investment Session | VRS Realinvest";
+// Copy: Page Copy v3 §3. The page doesn't say whether the session is free or
+// paid until Sudhesh confirms the offer. Session length, who runs it, session
+// format, the Google rating and buyer-only representation stay off the page
+// until he confirms them.
+const TITLE = "One-on-One Property Strategy Session | VRS Realinvest";
 const DESCRIPTION =
-  "Book a free One-on-One Session to clarify your investment goals, budget and buying plan before you choose a property. Education, not financial advice.";
+  "Schedule a One-on-One Strategy Session to clarify your investment goals, budget and buying plan before you choose a property. Education, not financial advice.";
 
 export const metadata: Metadata = {
   // The v2 title already ends with the brand, so the root layout's
@@ -73,13 +74,13 @@ export default function StrategySessionPage() {
             <div className="mb-5 h-[2px] w-12 bg-[var(--primary-gold)]" />
 
             <h1 className="text-3xl font-medium leading-tight tracking-tight md:text-5xl">
-              Book a Free One-on-One Session
+              Schedule a One-on-One Strategy Session
             </h1>
 
             <p className={`mt-6 max-w-2xl ${BODY}`}>
               Before you look at a single listing, it helps to be clear on what
-              you want an investment property to do for you. In a free
-              One-on-One Session, we talk through your goals, budget, timing and
+              you want an investment property to do for you. In a One-on-One
+              Strategy Session, we talk through your goals, budget, timing and
               preferred locations, and explain how we would approach the search.
               You’ll leave with a clearer buying plan, and you’ll know whether
               our buyer’s agent service is a good fit. There’s no obligation and
@@ -126,7 +127,7 @@ export default function StrategySessionPage() {
 
           {/* ================= WHAT IT ISN'T ================= */}
           <section>
-            <h2 className={H2}>What a One-on-One Session isn’t</h2>
+            <h2 className={H2}>What a One-on-One Strategy Session isn’t</h2>
             <p className={`mt-5 ${BODY}`}>
               It isn’t financial, tax, lending or SMSF advice, and we won’t tell
               you how to structure your finances. Those questions belong with your
@@ -142,7 +143,7 @@ export default function StrategySessionPage() {
             id="book"
             className="scroll-mt-24 rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)]/80 p-6 backdrop-blur-sm md:p-10"
           >
-            <h2 className={H2}>Book your free One-on-One Session</h2>
+            <h2 className={H2}>Book your One-on-One Strategy Session</h2>
 
             <StrategySessionForm />
 

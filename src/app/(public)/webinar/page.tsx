@@ -28,7 +28,7 @@ export default function WebinarPage() {
               </Link>
               ,{" "}
               <Link href={BOOKING_URL} className={TEXT_LINK}>
-                schedule a One-on-One Session
+                schedule a One-on-One Strategy Session
               </Link>
               , or{" "}
               <a

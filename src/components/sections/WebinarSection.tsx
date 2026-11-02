@@ -80,11 +80,13 @@ export default function WebinarSection() {
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mx-auto my-4 opacity-70"></div>
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[var(--primary-gold)] to-transparent mx-auto my-4 opacity-70"></div>
 
-                {/* PLATFORM */}
+                {/* PLATFORM: no "Live" here. The webinar data has no
+                    live/recorded status; the registration page shows the
+                    format (Page Copy v3 §5). */}
                 <div className="flex items-center justify-center gap-2.5 text-gray-400 text-xs mb-4">
                   <Video size={14} className="text-[var(--primary-gold)]" />
                   <span className=" text-gray-400 text-[10px] tracking-[0.15em] uppercase">
-                    FREE Live Webinar
+                    Free webinar
                   </span>
                 </div>
 
@@ -100,7 +102,7 @@ export default function WebinarSection() {
                   rel="noopener noreferrer"
                   className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-[11px]  font-medium tracking-[0.18em] uppercase transition hover:opacity-90 hover:scale-[1.03]"
                 >
-                  Register Now
+                  Join the free webinar
                 </a>
               </div>
             );

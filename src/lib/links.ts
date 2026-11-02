@@ -1,5 +1,5 @@
-// Every "Schedule a One-on-One Session" button on the site opens the short
-// form on /strategy-session in the same tab, so the enquiry, consent and
+// Every "Schedule a One-on-One Strategy Session" button on the site opens the
+// short form on /strategy-session in the same tab, so the enquiry, consent and
 // tracking run before Calendly (client review, 26 Oct).
 export const BOOKING_URL = "/strategy-session#book";
 

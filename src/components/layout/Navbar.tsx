@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { BOOKING_URL } from "@/lib/links";
+import BookingLabel from "@/components/ui/BookingLabel";
 
 // The logo already links home, so the menu opens with the service page
 // (client review, 26 Oct). Seven items plus the booking button.
@@ -102,7 +103,7 @@ export default function Navbar() {
             href={BOOKING_URL}
             className={`hidden md:inline-block whitespace-nowrap ${BOOKING_BUTTON}`}
           >
-            Schedule a One-on-One Session
+            <BookingLabel />
           </Link>
 
           {/* MOBILE BUTTON */}
@@ -140,7 +141,7 @@ export default function Navbar() {
               onClick={() => setIsOpen(false)}
               className={`md:hidden text-center ${BOOKING_BUTTON}`}
             >
-              Schedule a One-on-One Session
+              <BookingLabel />
             </Link>
           </div>
         </div>

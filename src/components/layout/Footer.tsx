@@ -23,10 +23,10 @@ export default function Footer() {
   // - Below lg: pb-40 lifts everything above the stack (~152px tall); the
   //   safe-area inset is added because the stack's offset includes it.
   // - lg+: no extra height; instead the content stays out of the stack's
-  //   column, 347px from the right edge (24 offset + 299 wide + 24; the pill
-  //   reads "Schedule a One-on-One Session" there). With the max-w-6xl
-  //   (1152px) container centred, that needs 899px - 50vw of extra right
-  //   padding: 323px max, 0 from 1798px wide.
+  //   column, 347px from the right edge (24 offset + 299 wide + 24). The
+  //   pill is 242px wide since its label went to two lines, so this leaves
+  //   slack. With the max-w-6xl (1152px) container centred, that needs
+  //   899px - 50vw of extra right padding: 323px max, 0 from 1798px wide.
   return (
    <footer className="relative bg-[var(--background)] text-gray-400 pt-10 pb-[calc(10rem+env(safe-area-inset-bottom))] lg:pb-4 overflow-hidden font-body lg:[--cta-gutter:clamp(0rem,56.1875rem_-_50vw,20.1875rem)]">
   {/* TOP LINE */}

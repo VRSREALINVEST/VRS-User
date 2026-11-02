@@ -4,6 +4,7 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import TeamSection from "@/components/sections/TeamSection";
 import NationwideCoverage from "@/components/sections/NationwideCoverage";
 import Link from "next/link";
+import BookingLabel from "@/components/ui/BookingLabel";
 import { BOOKING_URL, WHATSAPP_URL } from "@/lib/links";
 import {
   getDiscoverVideo,
@@ -14,12 +15,12 @@ import {
 } from "@/lib/publicContent";
 import type { Metadata } from "next";
 
-// Page Copy v2 §1. The title already ends with the brand, so the root
+// Page Copy v3 §1. The title already ends with the brand, so the root
 // layout's "%s | VRS Real Invest" template must not add it again. The
 // canonical stays the manual <link> below.
 const TITLE = "Buyers Agent Australia for Investors | VRS Realinvest";
 const DESCRIPTION =
-  "Buyer’s agent helping busy professionals and families research and buy investment property across Australia. Schedule a free One-on-One Session.";
+  "Buyer’s agent helping busy professionals and families research and buy investment property across Australia. Schedule a One-on-One Strategy Session.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -116,9 +117,9 @@ export default async function HomePage() {
                 Interstate and SMSF purchases
               </h3>
               <p className={`mt-3 ${BODY}`}>
-                We also represent investors buying outside their home state, and
-                SMSF trustees once their own licensed advisers have confirmed an
-                SMSF purchase suits them.
+                We also act for investors buying outside their home state, and
+                for SMSF trustees who have decided, on their own licensed
+                advice, that a property purchase suits their fund.
               </p>
             </div>
           </div>
@@ -158,8 +159,8 @@ export default async function HomePage() {
             </p>
 
             <p className="text-gray-400 mb-6 text-sm md:text-base max-w-xl mx-auto">
-              A free One-on-One Session is a no-pressure conversation about your
-              goals, budget and timing. You’ll leave knowing whether our
+              A One-on-One Strategy Session is a no-pressure conversation about
+              your goals, budget and timing. You’ll leave knowing whether our
               buyer’s agent service suits you and what it includes. Prefer to
               start with a quick question?{" "}
               <a
@@ -178,7 +179,7 @@ export default async function HomePage() {
               href={BOOKING_URL}
               className="inline-block bg-[var(--primary-gold)] text-[#221F1F] px-7 py-2.5 rounded-lg text-sm font-semibold hover:opacity-90 transition duration-300"
             >
-              Schedule a One-on-One Session
+              <BookingLabel />
             </Link>
           </div>
         </div>
