@@ -226,7 +226,8 @@ export default function InvestmentPropertyBuyersAgentPage() {
           <p className={`mt-4 max-w-2xl ${BODY}`}>
             As your investment property buyer’s agent, VRS Realinvest works for
             you, the buyer, from your first brief to settlement, in whichever
-            Australian market best fits your goals.
+            Australian market best fits your goals and our current research,
+            with the appropriate local professionals supporting each purchase.
           </p>
 
           <div className="mt-8">

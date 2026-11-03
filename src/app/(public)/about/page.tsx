@@ -17,9 +17,9 @@ export default async function AboutPage() {
         <TeamSection members={team} />
 
         {/* ================= ABOUT SUDHESH ================= */}
-        {/* Page Copy v2 §4; article bylines link to /about#sudhesh. Left out
-            until Sudhesh confirms them: investing since, buyer’s agent since
-            and his webinar languages. scroll-mt clears the fixed navbar. */}
+        {/* Page Copy v3 §4; article bylines link to /about#sudhesh. Left out
+            until Sudhesh confirms them: his licence details and experience
+            years. scroll-mt clears the fixed navbar. */}
         <section
           id="sudhesh"
           className="max-w-7xl mx-auto px-6 py-20 md:py-24 scroll-mt-24"
@@ -35,14 +35,11 @@ export default async function AboutPage() {
 
           <div className="max-w-3xl mx-auto text-center">
             <p className=" text-gray-300 leading-relaxed tracking-wide">
-              Sudhesh K Valappil is the founder of VRS Realinvest and a licensed
-              buyer’s agent (licence no. 20496430). He started VRS Realinvest to
-              help busy professionals and families make property decisions with
-              evidence rather than hype. He runs the free property investment
-              webinars and writes or reviews VRS articles on rental yield,
-              market research and the buying process for Australian investors.
-              He does not provide financial, tax or lending advice; the articles
-              are general information.
+              Sudhesh K Valappil is the founder of VRS Realinvest and a buyer’s
+              agent. He started VRS Realinvest to help busy professionals and
+              families make property decisions with evidence rather than hype.
+              He runs the free property investment webinars. He does not provide
+              financial, tax or lending advice.
             </p>
 
             <p className="mt-6 text-sm tracking-wide text-gray-400">

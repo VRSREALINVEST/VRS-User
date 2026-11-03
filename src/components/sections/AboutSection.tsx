@@ -216,7 +216,7 @@ export default function AboutSection() {
             </h2>
 
             <p className=" text-gray-400 mb-6 text-sm md:text-base tracking-wide leading-relaxed max-w-xl mx-auto">
-              Partner with VRS Real Invest and secure premium real estate
+              Partner with VRS Realinvest and secure premium real estate
               opportunities today.
             </p>
 
